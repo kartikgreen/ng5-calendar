@@ -22,16 +22,17 @@
         </tr>
       </thead>
       <tbody>
-            <tr *ngFor="let sunday of this.weekDays.sunday"> <td>{{sunday}}</td></tr>
-            <br>
-            <tr *ngFor="let monday of this.weekDays.monday"><td>{{monday}}</td></tr>
-            <br>
-            <tr *ngFor="let tuesday of this.weekDays.tuesday"><td>{{tuesday}}</td></tr>
-            <br>
-            <tr *ngFor="let wednesday of this.weekDays.wednesday"><td>{{wednesday}}</td></tr>
-            <br>
-            <tr *ngFor="let thursday of this.weekDays.thursday"><td>{{thursday}}</td></tr>
+          <tr>
+            <td><tr *ngFor="let sunday of this.weekDays.sunday"> {{sunday}}</tr></td>
+            <td><tr *ngFor="let monday of this.weekDays.monday">{{monday}}</tr></td>
+            <td><tr *ngFor="let tuesday of this.weekDays.tuesday">{{tuesday}}</tr></td>
+            <td><tr *ngFor="let wednesday of this.weekDays.wednesday">{{wednesday}}</tr></td>
+            <td><tr *ngFor="let thursday of this.weekDays.thursday">{{thursday}}</tr></td>
+            <td><tr *ngFor="let friday of this.weekDays.friday">{{friday}}</tr></td>
+            <td><tr *ngFor="let saturday of this.weekDays.saturday">{{saturday}}</tr></td>
+          </tr>
       </tbody>
     </table>
+    <pre>{{this.weekDays | json}}</pre>
   </div>
 </div>
