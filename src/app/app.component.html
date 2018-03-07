@@ -22,11 +22,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <ng-container *ngFor="let number of numbers">
-            <td>{{number + 1}}</td>
-          </ng-container>
-        </tr>
+            <tr *ngFor="let sunday of this.weekDays.sunday"> <td>{{sunday}}</td></tr>
+            <br>
+            <tr *ngFor="let monday of this.weekDays.monday"><td>{{monday}}</td></tr>
+            <br>
+            <tr *ngFor="let tuesday of this.weekDays.tuesday"><td>{{tuesday}}</td></tr>
+            <br>
+            <tr *ngFor="let wednesday of this.weekDays.wednesday"><td>{{wednesday}}</td></tr>
+            <br>
+            <tr *ngFor="let thursday of this.weekDays.thursday"><td>{{thursday}}</td></tr>
       </tbody>
     </table>
   </div>

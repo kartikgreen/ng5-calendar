@@ -8,10 +8,17 @@ import { Component } from '@angular/core';
 export class AppComponent {
   currentYear: number = 2018;
   numbers: any;
+  weekDays: any = {};
   index: number = 0;
   ngOnInit(){
+    this.weekDays.sunday = [];
+    this.weekDays.monday = [];
+    this.weekDays.tuesday = [];
+    this.weekDays.wednesday = [];
+    this.weekDays.thursday = [];
+    this.weekDays.friday = [];
+    this.weekDays.saturday = [];
     this.getTotalNumberOfDays();
-    console.log(this.calculateDayBasedOnDate('08/02/1992'));
   } 
   getMonthName(index) {
     const month = new Array();
@@ -48,7 +55,31 @@ export class AppComponent {
   getTotalNumberOfDays() {
     const totalNumberOfDays = this.daysInMonth(this.index + 1, this.currentYear);
     this.numbers = Array(totalNumberOfDays).fill(0).map((x,i)=>i);
-    console.log('Total days', this.numbers);
+    this.numbers.map(m => {
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'sunday') {
+        this.weekDays.sunday.push(m + 1); 
+      }
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'monday') {
+        this.weekDays.monday.push(m + 1); 
+      }
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'tuesday') {
+        this.weekDays.tuesday.push(m + 1); 
+      }
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'wednesday') {
+        this.weekDays.wednesday.push(m + 1); 
+      }
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'thursday') {
+        this.weekDays.thursday.push(m + 1); 
+      }
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'friday') {
+        this.weekDays.friday.push(m + 1); 
+      }
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'saturday') {
+        this.weekDays.saturday.push(m + 1); 
+      }
+    });
+    this.weekDays.sunday.unshift("-");
+    this.weekDays.thursday.splice(4, 0, '-');
   }
   daysInMonth (month, year) {
     return new Date(year, month, 0).getDate();
@@ -58,25 +89,25 @@ export class AppComponent {
     let day: any = date.getDay(); 
       switch (day) {
         case 0:
-            day = "Sunday";
+            day = "sunday";
             break;
         case 1:
-            day = "Monday";
+            day = "monday";
             break;
         case 2:
-            day = "Tuesday";
+            day = "tuesday";
             break;
         case 3:
-            day = "Wednesday";
+            day = "wednesday";
             break;
         case 4:
-            day = "Thursday";
+            day = "thursday";
             break;
         case 5:
-            day = "Friday";
+            day = "friday";
             break;
         case 6:
-            day = "Saturday";
+            day = "saturday";
       }
     return day;
   }
