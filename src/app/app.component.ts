@@ -90,22 +90,27 @@ export class AppComponent {
         this.weekDays.saturday.push(m + 1); 
       }
     });
-    this.checkWhichWeekDaysHasOne();
-    this.weekDays.thursday.splice(4, 0, '-');
+    this.checkWhichWeekDaysHasOne().then(x => {
+      const weekDays = this.weekDays;
+        console.log('weekdays', x, weekDays.sunday);
+    });
+    // this.weekDays.thursday.splice(4, 0, '-');
   }
 
   checkWhichWeekDaysHasOne() {
     const weekDays = this.weekDays;
+    let beginningOfTheWeek;
     Object.keys(weekDays).forEach(function (key, index) {
       const weekdays = weekDays[key];
       weekdays.map(o => { 
         if (o === 1) {
-          const beginningOfTheWeek = index;
-          // this.beginningOfTheWeek = beginningOfTheWeek;
-          console.log('chkwhichweekdays', beginningOfTheWeek);
+           beginningOfTheWeek = index;
           // console.log(`${key} has ${o} at the index ${index}`);
         }
       });
+    });
+    return new Promise((resolve, reject) => {
+      resolve(beginningOfTheWeek);
     });
   }
 
