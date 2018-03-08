@@ -91,10 +91,11 @@ export class AppComponent {
       }
     });
     this.checkWhichWeekDaysHasOne().then(x => {
-      const weekDays = this.weekDays;
-        console.log('weekdays', x, weekDays.sunday);
+      let i: any = x;
+      for (i <= 0; i--; ) {
+        this.weekDays[this.calculateDayBasedOnDate(i)].unshift('...');
+      }
     });
-    // this.weekDays.thursday.splice(4, 0, '-');
   }
 
   checkWhichWeekDaysHasOne() {
@@ -105,7 +106,6 @@ export class AppComponent {
       weekdays.map(o => { 
         if (o === 1) {
            beginningOfTheWeek = index;
-          // console.log(`${key} has ${o} at the index ${index}`);
         }
       });
     });
@@ -119,8 +119,13 @@ export class AppComponent {
   }
 
   calculateDayBasedOnDate(dateInput) {
-    const date = new Date(dateInput);  
-    let day: any = date.getDay(); 
+    let day;
+    if (dateInput >= 0) {
+      day = dateInput;
+    } else {
+      const date = new Date(dateInput);  
+       day = date.getDay();
+    }
     switch (day) {
       case 0:
           day = "sunday";

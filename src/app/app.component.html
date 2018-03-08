@@ -23,13 +23,13 @@
       </thead>
       <tbody>
           <tr>
-            <td><tr *ngFor="let sunday of this.weekDays.sunday"> {{sunday}}</tr></td>
-            <td><tr *ngFor="let monday of this.weekDays.monday">{{monday}}</tr></td>
-            <td><tr *ngFor="let tuesday of this.weekDays.tuesday">{{tuesday}}</tr></td>
-            <td><tr *ngFor="let wednesday of this.weekDays.wednesday">{{wednesday}}</tr></td>
-            <td><tr *ngFor="let thursday of this.weekDays.thursday">{{thursday}}</tr></td>
-            <td><tr *ngFor="let friday of this.weekDays.friday">{{friday}}</tr></td>
-            <td><tr *ngFor="let saturday of this.weekDays.saturday">{{saturday}}</tr></td>
+            <td><tr *ngFor="let sunday of this.weekDays.sunday"> <td style="border-left: 5px solid red">{{sunday}}</td></tr></td>
+            <td><tr *ngFor="let monday of this.weekDays.monday"><td>{{monday}}</td></tr></td>
+            <td><tr *ngFor="let tuesday of this.weekDays.tuesday"><td>{{tuesday}}</td></tr></td>
+            <td><tr *ngFor="let wednesday of this.weekDays.wednesday"><td>{{wednesday}}</td></tr></td>
+            <td><tr *ngFor="let thursday of this.weekDays.thursday"><td>{{thursday}}</td></tr></td>
+            <td><tr *ngFor="let friday of this.weekDays.friday"><td>{{friday}}</td></tr></td>
+            <td><tr *ngFor="let saturday of this.weekDays.saturday"><td>{{saturday}}</td></tr></td>
           </tr>
       </tbody>
     </table>
