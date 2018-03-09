@@ -7,15 +7,31 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   currentYear: number = 2018;
-  numbers: any;
+  numberOfDaysInMonth: any;
   weekDays: any = {};
   index: number = 0;
   beginningOfTheWeek;
+  numbers = [3, 3, 3, 3];
+  answer;
 
   ngOnInit() {
     this.resetWeekDays();
     this.getTotalNumberOfDays();
-  } 
+  }
+
+  attachEventsToTheDate(week_days) {
+    var answer = [week_days].reduce(function(result, item, index) {
+      var key = Object.keys(item)[0]; //first property: a, b, c
+      var value = item[key][index];
+      var obj = {};
+      obj[key] = [obj[key]];
+      console.log('obj is', JSON.stringify(obj));
+      // JSON.stringify(obj);
+      // result.push(obj);
+      return result;
+    }, {}); //an empty array
+    console.log('a is ',answer);
+  }
 
   resetWeekDays() {
     this.weekDays.sunday = [];
@@ -66,8 +82,8 @@ export class AppComponent {
 
   getTotalNumberOfDays() {
     const totalNumberOfDays = this.daysInMonth(this.index + 1, this.currentYear);
-    this.numbers = Array(totalNumberOfDays).fill(0).map((x,i)=>i);
-    this.numbers.map(m => {
+    this.numberOfDaysInMonth = Array(totalNumberOfDays).fill(0).map((x,i)=>i);
+    this.numberOfDaysInMonth.map(m => {
       if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'sunday') {
         this.weekDays.sunday.push(m + 1); 
       }
@@ -92,9 +108,12 @@ export class AppComponent {
     });
     this.checkWhichWeekDaysHasOne().then(x => {
       let i: any = x;
-      for (i <= 0; i--; ) {
+      for (i <= 0; i--;) {
         this.weekDays[this.calculateDayBasedOnDate(i)].unshift('...');
       }
+    }).then(x => {
+      // Now we need to change the structure of json to attach events to the data
+      this.attachEventsToTheDate(this.weekDays);
     });
   }
 
@@ -114,7 +133,8 @@ export class AppComponent {
     });
   }
 
-  daysInMonth (month, year) {
+  // this.daysInMonth(7,2009); // output is 31
+  daysInMonth(month, year) {
     return new Date(year, month, 0).getDate();
   }
 
