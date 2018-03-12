@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
-
+import { ValuesPipe } from './key-value-pipe';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent, ValuesPipe
   ],
   imports: [
     BrowserModule

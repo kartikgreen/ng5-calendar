@@ -23,16 +23,79 @@
       </thead>
       <tbody>
           <tr>
-            <td><tr *ngFor="let sunday of this.weekDays.sunday"> <td style="border-left: 5px solid red">{{sunday}}</td></tr></td>
-            <td><tr *ngFor="let monday of this.weekDays.monday"><td>{{monday}} <div>krishna jayanthi</div><div>christmas</div></td></tr></td>
-            <td><tr *ngFor="let tuesday of this.weekDays.tuesday"><td>{{tuesday}}</td></tr></td>
-            <td><tr *ngFor="let wednesday of this.weekDays.wednesday"><td>{{wednesday}}</td></tr></td>
-            <td><tr *ngFor="let thursday of this.weekDays.thursday"><td>{{thursday}}</td></tr></td>
-            <td><tr *ngFor="let friday of this.weekDays.friday"><td>{{friday}}</td></tr></td>
-            <td><tr *ngFor="let saturday of this.weekDays.saturday"><td>{{saturday}}</td></tr></td>
+            <td>
+              <ng-container *ngFor="let key of this.weekDays.sunday | valuesPipe">
+                      <tr *ngFor='let sunday of key.value | valuesPipe'> 
+                        <td style="border-left: 5px solid red">
+                          {{sunday.key}}
+                          <div *ngFor='let events of sunday.value'>{{events}}</div>
+                        </td>
+                      </tr>
+              </ng-container>
+            </td>
+            <td>
+                <ng-container *ngFor="let key of this.weekDays.monday | valuesPipe">
+                        <tr *ngFor='let monday of key.value | valuesPipe'> 
+                          <td style="border-left: 5px solid red">
+                            {{monday.key}}
+                            <div *ngFor='let events of monday.value'>{{events}}</div>
+                          </td>
+                        </tr>
+                </ng-container>
+            </td>
+            <td>
+                <ng-container *ngFor="let key of this.weekDays.tuesday | valuesPipe">
+                        <tr *ngFor='let tuesday of key.value | valuesPipe'> 
+                          <td style="border-left: 5px solid red">
+                            {{tuesday.key}}
+                            <div *ngFor='let events of tuesday.value'>{{events}}</div>
+                          </td>
+                        </tr>
+                </ng-container>
+            </td>
+            <td>
+                <ng-container *ngFor="let key of this.weekDays.wednesday | valuesPipe">
+                        <tr *ngFor='let wednesday of key.value | valuesPipe'> 
+                          <td style="border-left: 5px solid red">
+                            {{wednesday.key}}
+                            <div *ngFor='let events of wednesday.value'>{{events}}</div>
+                          </td>
+                        </tr>
+                </ng-container>
+            </td>
+            <td>
+                <ng-container *ngFor="let key of this.weekDays.thursday | valuesPipe">
+                        <tr *ngFor='let thursday of key.value | valuesPipe'> 
+                          <td style="border-left: 5px solid red">
+                            {{thursday.key}}
+                            <div *ngFor='let events of thursday.value'>{{events}}</div>
+                          </td>
+                        </tr>
+                </ng-container>
+            </td>
+            <td>
+                <ng-container *ngFor="let key of this.weekDays.friday | valuesPipe">
+                        <tr *ngFor='let friday of key.value | valuesPipe'> 
+                          <td style="border-left: 5px solid red">
+                            {{friday.key}}
+                            <div *ngFor='let events of friday.value'>{{events}}</div>
+                          </td>
+                        </tr>
+                </ng-container>
+            </td>
+            <td>
+                <ng-container *ngFor="let key of this.weekDays.saturday | valuesPipe">
+                        <tr *ngFor='let saturday of key.value | valuesPipe'> 
+                          <td style="border-left: 5px solid red">
+                            {{saturday.key}}
+                            <div *ngFor='let events of saturday.value'>{{events}}</div>
+                          </td>
+                        </tr>
+                </ng-container>
+            </td>
           </tr>
       </tbody>
     </table>
-    <pre>{{this.weekDays | json}}</pre>
+    <pre>{{this.weekDays.sunday | json}}</pre>
   </div>
 </div>
