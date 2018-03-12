@@ -72,7 +72,15 @@ export class AppComponent {
   }
   showEvents(events) {
     console.log('show more events clicked', events);
-    this.DialogRef = this.dialog.open(DialogComponent);
+    let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '250px',
+      data: { name: this.name, animal: this.animal }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
   }
 
   attachEventsToTheDate(week_days) {
