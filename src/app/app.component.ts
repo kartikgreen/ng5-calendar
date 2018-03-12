@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-
+import { DialogComponent } from './dialog.component';
+import {VERSION, MatDialog, MatDialogRef} from '@angular/material';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   currentYear: number = 2018;
+  DialogRef: MatDialogRef<DialogComponent>;
   numberOfDaysInMonth: any;
   weekDays: any = {};
   index: number = 0;
@@ -41,11 +43,19 @@ export class AppComponent {
   ]
   eventsData: any = {
     "data": [
-        { "year": 2017, "month": "January", "date": 8, 
-         "events": ["event1", "event2", "event3"] 
+        { "year": 2018, "month": "January", "date": 7, 
+         "events": [
+           {"events_name": 'test name1', "events_location": 'Brampton'},
+           {"events_name": 'test name2', "events_location": 'Toronto'},
+           {"events_name": 'test name3', "events_location": 'Scarborough'}
+          ] 
         },
         { "year": 2018, "month": "January", "date": 28, 
-         "events": ["event9", "event10", "event11"] 
+         "events": [
+           {"events_name": 'test name1', "events_location": 'Brampton'},
+           {"events_name": 'test name2', "events_location": 'Toronto'},
+           {"events_name": 'test name3', "events_location": 'Scarborough'}
+          ] 
         },
         { "year": 2018, "month": "February", "date": 18, 
          "events": ["event3", "event4", "event5"] 
@@ -55,9 +65,14 @@ export class AppComponent {
         }
     ]
   }
+  constructor(private dialog: MatDialog) {}
   ngOnInit() {
     this.resetWeekDays();
     this.getTotalNumberOfDays();
+  }
+  showEvents(events) {
+    console.log('show more events clicked', events);
+    this.DialogRef = this.dialog.open(DialogComponent);
   }
 
   attachEventsToTheDate(week_days) {
@@ -161,7 +176,6 @@ export class AppComponent {
       this.weekDays.thursday = this.attachEventsToTheDate(this.weekDays.thursday);
       this.weekDays.friday = this.attachEventsToTheDate(this.weekDays.friday);
       this.weekDays.saturday = this.attachEventsToTheDate(this.weekDays.saturday);
-      console.log('sunday data structure', this.weekDays.sunday);
     });
   }
 
@@ -181,7 +195,6 @@ export class AppComponent {
     });
   }
 
-  // this.daysInMonth(7,2009); // output is 31
   daysInMonth(month, year) {
     return new Date(year, month, 0).getDate();
   }

@@ -28,7 +28,15 @@
                       <tr *ngFor='let sunday of key.value | valuesPipe'> 
                         <td style="border-left: 5px solid red">
                           {{sunday.key}}
-                          <div *ngFor='let events of sunday.value'>{{events}}</div>
+                          <div *ngFor='let events of sunday.value; let i = index'>
+                            <span *ngIf="i <= 1">{{events.events_name}}</span>
+                            <label *ngIf="i > 1" class="form-check-label">
+                              <a class="fa fa-plus" aria-hidden="true" 
+                                title="More Than two event's here" 
+                                (click)="showEvents(sunday.value)">More...
+                              </a>
+                              </label>
+                          </div>
                         </td>
                       </tr>
               </ng-container>
@@ -96,6 +104,6 @@
           </tr>
       </tbody>
     </table>
-    <pre>{{this.weekDays.sunday | json}}</pre>
+    <!-- <pre>{{this.weekDays.sunday | json}}</pre> -->
   </div>
 </div>
