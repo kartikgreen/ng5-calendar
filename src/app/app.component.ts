@@ -11,26 +11,97 @@ export class AppComponent {
   weekDays: any = {};
   index: number = 0;
   beginningOfTheWeek;
-  numbers = [3, 3, 3, 3];
   answer;
+  eventsData: any = {
+    "data": [
+        { "year": "2017", "month": "January", "date": 7, 
+         "events": ["event1", "event2", "event3"] 
+        },
+        { "year": "2017", "month": "January", "date": 7, 
+         "events": ["event9", "event10", "event11"] 
+        },
+        { "year": "2018", "month": "February", "date": 18, 
+         "events": ["event3", "event4", "event5"] 
+        },
+        { "year": "2018", "month": "June", "date": 9, 
+         "events": ["event3", "event4", "event5"] 
+        }
+    ]
+  }
+   groupEvents(events) {
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday',
+      'thursday', 'friday', 'saturday'
+    ];
+    return events.data.reduce((result, item) => {
+      console.log('hello',result); 
+      const key = item.month.toLowerCase() + " " + item.year;
+      
+      // if (!result[key]) {
+      //   result[key] = Object.assign(...dayNames.map(day => ({
+      //     [day]: {}
+      //   })));
+        
+      //   const dt = new Date("1 " + key);
+      //   const month = dt.getMonth();
+        
+      //   while (dt.getMonth() === month) {
+      //     result[key][dayNames[dt.getDay()]][dt.getDate()] = [];
+      //     dt.setDate(dt.getDate() + 1);
+      //   }
+        
+      // }
+      const dt = new Date(item.date + " " + key);
+      result[key][dayNames[dt.getDay()]][dt.getDate()].push(...item.events);
+      return result;
+    }, {});
+  }
 
   ngOnInit() {
     this.resetWeekDays();
     this.getTotalNumberOfDays();
   }
 
-  attachEventsToTheDate(week_days) {
-    var answer = [week_days].reduce(function(result, item, index) {
-      var key = Object.keys(item)[0]; //first property: a, b, c
-      var value = item[key][index];
-      var obj = {};
-      obj[key] = [obj[key]];
-      console.log('obj is', JSON.stringify(obj));
-      // JSON.stringify(obj);
-      // result.push(obj);
-      return result;
-    }, {}); //an empty array
-    console.log('a is ',answer);
+  // attachEventsToTheDate() {
+  //   console.log('sunday', JSON.stringify(this.weekDays.sunday));
+  //   // var i = 0;
+  //   this.eventsData.data.reduce((result, item, index, array) => {
+  //     // result[item.month] = [];
+  //     if (item.month === this.getMonthName(this.index)) {
+  //       var answer = this.weekDays.sunday.reduce((answer, iteml) => {
+  //         // alert(iteml);
+  //       // alert(iteml);
+  //       answer['sunday'] = [];
+  //       answer['sunday'].push({
+  //         [iteml]: ['test']
+  //       });
+  //       if (item.date === iteml) {
+  //         alert(item.date);
+  //         answer['sunday'].push({
+  //           [iteml]: [item.events]
+  //         });
+  //       }
+  //       return result;  
+  //       },{});
+  //       console.log('a is ',answer);
+  //       // alert(item.date + ' ' + item.events);
+  //     }
+  //     // i++;
+  //     // console.log('result', result, 'item', item[1].month, 'array', array);
+  //   return result;
+  //   }, {}); //an empty array
+  // }
+
+  // sunday.map(x => ({[x]: data.find(y => y.date == x).events}))
+
+  attachEventsToTheDate() {
+    console.log('eeloooo', this.weekDays.sunday.map(x => {
+      var actual = this.eventsData.data.find(y => y.date == x);
+      if(actual) {
+          return {[x]: actual.events}
+      } else {
+          return {[x]: []}
+      }
+  }))
   }
 
   resetWeekDays() {
@@ -113,7 +184,7 @@ export class AppComponent {
       }
     }).then(x => {
       // Now we need to change the structure of json to attach events to the data
-      this.attachEventsToTheDate(this.weekDays);
+      this.attachEventsToTheDate();
     });
   }
 
