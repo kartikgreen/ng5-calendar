@@ -1,46 +1,35 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-export interface DialogConfig {
-    title?: string,
-    content?: string,
-    ok?: string,
-    close: string
-}
-
 @Component({
   template: `
   <h2 mat-dialog-title>
-    {{dialog.titles}}
+    Event's Detail
   </h2>
   <mat-dialog-content>
-    {{ dialog.content }}
+  <div *ngFor='let events of dialog;'>
+    <span>event's Name: {{events.events_name}}</span>
+    <span>event's Location: {{events.events_location}}</span>
+  </div>  
   </mat-dialog-content>
   <mat-dialog-actions>
     <button
         mat-button
         (click)="dialogRef.close(false)"
         color="primary">
-        {{ dialog.close }}
-    </button>
-    <button
-        *ngIf="dialog.ok"
-        mat-button
-        color="primary"
-        (click)="dialogRef.close(true)">
-        {{ dialog.ok }}
+        close
     </button>
   </mat-dialog-actions>
   `
 })
 export class DialogComponent {
 
-  get dialog(): DialogConfig {
+  get dialog() {
       return this.data;
   }
 
   constructor(
-      @Inject(MAT_DIALOG_DATA) public data: DialogConfig,
+      @Inject(MAT_DIALOG_DATA) public data,
       public dialogRef: MatDialogRef<DialogComponent>
   ) {}
 

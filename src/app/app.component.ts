@@ -7,19 +7,12 @@ import {VERSION, MatDialog, MatDialogRef} from '@angular/material';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  currentYear: number = 2018;
+  currentYear: number = (new Date()).getFullYear();
   DialogRef: MatDialogRef<DialogComponent>;
   numberOfDaysInMonth: any;
   weekDays: any = {};
   index: number = 0;
   beginningOfTheWeek;
-  answer;
-  sundayWithEvents;
-  demo = {
-    'key1': 'ANGULAR 2',
-    'key2': 'Pardeep',
-    'key3': 'Jain',
-  }
   eventsDatas = [
     {
       "...": []
@@ -71,14 +64,9 @@ export class AppComponent {
     this.getTotalNumberOfDays();
   }
   showEvents(events) {
-    console.log(events[0].events_name);
-    const eventss = {
-      titles: 'Current Location Not Available',
-      close: 'OK'
-    };
     let dialogRef = this.dialog.open(DialogComponent, {
       width: '250px',
-      data: eventss
+      data: events
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -87,11 +75,11 @@ export class AppComponent {
   }
 
   attachEventsToTheDate(week_days) {
-    const currentYearAndMonth = this.eventsData.data.filter(x => {
+    const currentEventsData= this.eventsData.data.filter(x => {
       return x.year === this.currentYear && x.month === this.getMonthName(this.index);
     });
-    return week_days.map((x, i) => {
-      var actual = currentYearAndMonth.find(y =>  y.date == x);
+    return week_days.map((x) => {
+      var actual = currentEventsData.find(y =>  y.date == x);
       if(actual) { 
           return {[x]: actual.events}
       } else {

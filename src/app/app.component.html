@@ -1,7 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
-    ng5-calendar
+    Event's Calendar View
   </h1>
   <div>
     <span><a (click)="previousButtonClicked()">Prev</a></span>
@@ -30,9 +30,9 @@
                           {{sunday.key}}
                           <div *ngFor='let events of sunday.value; let i = index'>
                             <span *ngIf="i <= 1">{{events.events_name}}</span>
-                            <label *ngIf="i > 1" class="form-check-label">
+                            <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
                               <a class="fa fa-plus" aria-hidden="true" 
-                                title="More Than two event's here" 
+                                title="Click here to view more..." 
                                 (click)="showEvents(sunday.value)">More...
                               </a>
                               </label>
