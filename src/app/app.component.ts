@@ -71,15 +71,18 @@ export class AppComponent {
     this.getTotalNumberOfDays();
   }
   showEvents(events) {
-    console.log('show more events clicked', events);
-    let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+    console.log(events[0].events_name);
+    const eventss = {
+      titles: 'Current Location Not Available',
+      close: 'OK'
+    };
+    let dialogRef = this.dialog.open(DialogComponent, {
       width: '250px',
-      data: { name: this.name, animal: this.animal }
+      data: eventss
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.animal = result;
     });
   }
 
