@@ -36,25 +36,33 @@ export class AppComponent {
   ]
   eventsData: any = {
     "data": [
-        { "year": 2018, "month": "January", "date": 7, 
+        { "year": 2018, "month": 1, "date": 7, 
          "events": [
            {"events_name": 'test name1', "events_location": 'Brampton'},
            {"events_name": 'test name2', "events_location": 'Toronto'},
            {"events_name": 'test name3', "events_location": 'Scarborough'}
           ] 
         },
-        { "year": 2018, "month": "January", "date": 28, 
+        { "year": 2018, "month": 1, "date": 28, 
          "events": [
-           {"events_name": 'test name1', "events_location": 'Brampton'},
-           {"events_name": 'test name2', "events_location": 'Toronto'},
-           {"events_name": 'test name3', "events_location": 'Scarborough'}
+           {"events_name": 'test name4', "events_location": 'Brampton'},
+           {"events_name": 'test name5', "events_location": 'Toronto'},
+           {"events_name": 'test name6', "events_location": 'Scarborough'}
           ] 
         },
-        { "year": 2018, "month": "February", "date": 18, 
-         "events": ["event3", "event4", "event5"] 
+        { "year": 2018, "month": 2, "date": 18, 
+        "events": [
+          {"events_name": 'test name7', "events_location": 'Brampton'},
+          {"events_name": 'test name8', "events_location": 'Toronto'},
+          {"events_name": 'test name9', "events_location": 'Scarborough'}
+         ] 
         },
-        { "year": 2018, "month": "June", "date": 9, 
-         "events": ["event3", "event4", "event5"] 
+        { "year": 2018, "month": 6, "date": 9, 
+        "events": [
+          {"events_name": 'test name10', "events_location": 'Brampton'},
+          {"events_name": 'test name11', "events_location": 'Toronto'},
+          {"events_name": 'test name12', "events_location": 'Scarborough'}
+         ] 
         }
     ]
   }
@@ -63,6 +71,7 @@ export class AppComponent {
     this.resetWeekDays();
     this.getTotalNumberOfDays();
   }
+  
   showEvents(events) {
     let dialogRef = this.dialog.open(DialogComponent, {
       width: '250px',
@@ -76,12 +85,13 @@ export class AppComponent {
 
   attachEventsToTheDate(week_days) {
     const currentEventsData= this.eventsData.data.filter(x => {
-      return x.year === this.currentYear && x.month === this.getMonthName(this.index);
+      const month = this.getMonthName(x.month - 1);
+      return x.year === this.currentYear && month === this.getMonthName(this.index);
     });
     return week_days.map((x) => {
-      var actual = currentEventsData.find(y =>  y.date == x);
-      if(actual) { 
-          return {[x]: actual.events}
+      const eventInfo = currentEventsData.find(y =>  y.date == x);
+      if(eventInfo) { 
+          return {[x]: eventInfo.events}
       } else {
           return {[x]: []}
       }
