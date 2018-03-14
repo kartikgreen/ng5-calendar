@@ -7,6 +7,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {EventsCalendarRepositoryService} from './events-calendar-filter/events-calendar-repository.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogComponent } from './dialog.component';
+import {MatSelectModule} from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { ValuesPipe } from './key-value-pipe';
@@ -22,7 +24,9 @@ import { EventsCalendarFilterComponent } from './events-calendar-filter/events-c
     MatTableModule,
     BrowserAnimationsModule,
     MatCheckboxModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSelectModule,
+    FormsModule
   ],
   providers: [EventsCalendarRepositoryService],
   entryComponents: [DialogComponent],

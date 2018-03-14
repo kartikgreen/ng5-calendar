@@ -5,13 +5,33 @@
   </h1>
   <div>
     <span><a (click)="previousButtonClicked()">Prev</a></span>
-    <span>{{this.getMonthName(this.index)}}{{currentYear}}</span>
+    <span>{{this.getMonthName(this.monthIndex)}}{{currentYear}}</span>
     <span><a (click)="nextButtonClicked()">Next</a></span>
+    <span style="margin-left: 30px;">
+      <mat-form-field>
+        <mat-select [(ngModel)]="calendarViewType" (ngModelChange)="onCalendarViewTypeChange($event)" placeholder="select">
+          <mat-option value="month">
+            Month
+          </mat-option>
+          <mat-option value="week">
+            Week
+          </mat-option>
+          <mat-option value="day">
+            Day
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </span>
+    <!-- controls to navigate next and previous week -->
+    <span *ngIf="calendarViewType === 'week'">
+      <span><a (click)="previousWeekButtonClicked()">Previous Week</a></span>
+      <span><a (click)="nextWeekButtonClicked()">Next Week</a></span>
+    </span>
   </div>
   <div class="container">
     <app-events-calendar-filter style="float: left; height: 500px; width:300px;"></app-events-calendar-filter> 
     <table style="float: left; width:300px;" class="table">
-      <thead>
+      <thead *ngIf="calendarViewType !== 'day'">
         <tr>
           <th>Sunday</th>
           <th>Monday</th>
@@ -22,7 +42,21 @@
           <th>Saturday</th>
         </tr>
       </thead>
-      <tbody>
+      <thead *ngIf="calendarViewType === 'day'">
+        <tr>
+          <th>
+            Monday
+          </th>
+        </tr>
+      </thead>
+      <tbody *ngIf="calendarViewType === 'day'">
+          <tr>
+            <td>
+              3
+            </td>
+          </tr>
+      </tbody>
+      <tbody *ngIf="calendarViewType !== 'week' && calendarViewType !== 'day'">
           <tr>
             <td>
                 <ng-container *ngFor="let key of this.weekDays.sunday | valuesPipe">
@@ -104,6 +138,88 @@
             </td>
           </tr>
       </tbody>
+      <tbody *ngIf="calendarViewType === 'week'">
+        <tr>
+          <td>
+              <ng-container *ngFor="let key of this.weekWiseWeekDays.sunday | valuesPipe">
+                      <tr *ngFor='let sunday of key.value | valuesPipe'> 
+                        <td style="border-left: 5px solid red">
+                          {{sunday.key}}
+                          <div *ngFor='let events of sunday.value; let i = index'>
+                            <span *ngIf="i <= 1">{{events.events_name}}</span>
+                            <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                              <a class="fa fa-plus" aria-hidden="true" 
+                                title="Click here to view more..." 
+                                (click)="showEvents(sunday.value)">More...
+                              </a>
+                              </label>
+                          </div>
+                        </td>
+                      </tr>
+              </ng-container>
+          </td>
+          <td>
+              <ng-container *ngFor="let key of this.weekWiseWeekDays.monday | valuesPipe">
+                      <tr *ngFor='let monday of key.value | valuesPipe'> 
+                        <td style="border-left: 5px solid red">
+                          {{monday.key}}
+                          <div *ngFor='let events of monday.value'>{{events}}</div>
+                        </td>
+                      </tr>
+              </ng-container>
+          </td>
+          <td>
+              <ng-container *ngFor="let key of this.weekWiseWeekDays.tuesday | valuesPipe">
+                      <tr *ngFor='let tuesday of key.value | valuesPipe'> 
+                        <td style="border-left: 5px solid red">
+                          {{tuesday.key}}
+                          <div *ngFor='let events of tuesday.value'>{{events}}</div>
+                        </td>
+                      </tr>
+              </ng-container>
+          </td>
+          <td>
+              <ng-container *ngFor="let key of this.weekWiseWeekDays.wednesday | valuesPipe">
+                      <tr *ngFor='let wednesday of key.value | valuesPipe'> 
+                        <td style="border-left: 5px solid red">
+                          {{wednesday.key}}
+                          <div *ngFor='let events of wednesday.value'>{{events}}</div>
+                        </td>
+                      </tr>
+              </ng-container>
+          </td>
+          <td>
+              <ng-container *ngFor="let key of this.weekWiseWeekDays.thursday | valuesPipe">
+                      <tr *ngFor='let thursday of key.value | valuesPipe'> 
+                        <td style="border-left: 5px solid red">
+                          {{thursday.key}}
+                          <div *ngFor='let events of thursday.value'>{{events}}</div>
+                        </td>
+                      </tr>
+              </ng-container>
+          </td>
+          <td>
+              <ng-container *ngFor="let key of this.weekWiseWeekDays.friday | valuesPipe">
+                      <tr *ngFor='let friday of key.value | valuesPipe'> 
+                        <td style="border-left: 5px solid red">
+                          {{friday.key}}
+                          <div *ngFor='let events of friday.value'>{{events}}</div>
+                        </td>
+                      </tr>
+              </ng-container>
+          </td>
+          <td>
+              <ng-container *ngFor="let key of this.weekWiseWeekDays.saturday | valuesPipe">
+                      <tr *ngFor='let saturday of key.value | valuesPipe'> 
+                        <td style="border-left: 5px solid red">
+                          {{saturday.key}}
+                          <div *ngFor='let events of saturday.value'>{{events}}</div>
+                        </td>
+                      </tr>
+              </ng-container>
+          </td>
+        </tr>
+    </tbody>
     </table>
     <!-- <pre>{{this.weekDays.sunday | json}}</pre> -->
   </div>

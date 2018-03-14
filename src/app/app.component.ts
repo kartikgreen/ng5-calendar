@@ -11,8 +11,11 @@ export class AppComponent {
   DialogRef: MatDialogRef<DialogComponent>;
   numberOfDaysInMonth: any;
   weekDays: any = {};
-  index: number = 0;
+  weekWiseWeekDays: any = {};
+  monthIndex: number = 0;
+  weekIndex: number = 0;
   beginningOfTheWeek;
+  calendarViewType;
   eventsDatas = [
     {
       "...": []
@@ -34,6 +37,7 @@ export class AppComponent {
       "28": []
     }
   ]
+  
   eventsData: any = {
     "data": [
         { "year": 2018, "month": 1, "date": 7, 
@@ -67,6 +71,7 @@ export class AppComponent {
     ]
   }
   constructor(private dialog: MatDialog) {}
+  
   ngOnInit() {
     this.resetWeekDays();
     this.getTotalNumberOfDays();
@@ -86,7 +91,7 @@ export class AppComponent {
   attachEventsToTheDate(week_days) {
     const currentEventsData= this.eventsData.data.filter(x => {
       const month = this.getMonthName(x.month - 1);
-      return x.year === this.currentYear && month === this.getMonthName(this.index);
+      return x.year === this.currentYear && month === this.getMonthName(this.monthIndex);
     });
     return week_days.map((x) => {
       const eventInfo = currentEventsData.find(y =>  y.date == x);
@@ -108,6 +113,16 @@ export class AppComponent {
     this.weekDays.saturday = [];
   }
 
+  resetWeekWiseWeekDays() {
+    this.weekWiseWeekDays.sunday = [];
+    this.weekWiseWeekDays.monday = [];
+    this.weekWiseWeekDays.tuesday = [];
+    this.weekWiseWeekDays.wednesday = [];
+    this.weekWiseWeekDays.thursday = [];
+    this.weekWiseWeekDays.friday = [];
+    this.weekWiseWeekDays.saturday = [];
+  }
+
   getMonthName(index) {
     const month = new Array();
     month[0] = "January";
@@ -127,9 +142,9 @@ export class AppComponent {
 
   nextButtonClicked() {
     this.resetWeekDays();
-    this.index += 1;
-    if (this.index >= 11) {
-      this.index = 0;
+    this.monthIndex += 1;
+    if (this.monthIndex >= 11) {
+      this.monthIndex = 0;
       this.currentYear ++;
     }
     this.getTotalNumberOfDays();
@@ -137,37 +152,69 @@ export class AppComponent {
 
   previousButtonClicked() {
     this.resetWeekDays();
-    this.index -= 1;
-    if (this.index < 0) {
-      this.index = 11;
+    this.monthIndex -= 1;
+    if (this.monthIndex < 0) {
+      this.monthIndex = 11;
       this.currentYear --;
     }
     this.getTotalNumberOfDays();
   }
 
+  previousWeekButtonClicked() {
+    this.weekIndex --;
+    if (this.weekIndex < 0) {
+      this.weekIndex = 4;
+    }
+    this.getWeekOfTheMonth(this.weekIndex);
+  }
+
+  nextWeekButtonClicked() {
+    this.weekIndex ++;
+    if (this.weekIndex >= 5) {
+      this.weekIndex = 0;
+    }
+    this.getWeekOfTheMonth(this.weekIndex);
+  }
+
+  getWeekOfTheMonth(i) {
+    console.log('i-', i);
+    this.weekWiseWeekDays.sunday = this.weekDays.sunday.filter(x => x === this.weekDays.sunday[i]);
+    this.weekWiseWeekDays.monday = this.weekDays.monday.filter(x => x === this.weekDays.monday[i]);
+    this.weekWiseWeekDays.tuesday = this.weekDays.tuesday.filter(x => x === this.weekDays.tuesday[i]);
+    this.weekWiseWeekDays.wednesday = this.weekDays.wednesday.filter(x => x === this.weekDays.wednesday[i]);
+    this.weekWiseWeekDays.thursday = this.weekDays.thursday.filter(x => x === this.weekDays.thursday[i]);
+    this.weekWiseWeekDays.friday = this.weekDays.friday.filter(x => x === this.weekDays.friday[i]);
+    this.weekWiseWeekDays.saturday = this.weekDays.saturday.filter(x => x === this.weekDays.saturday[i]);
+  }
+
+  getDayOfTheMonth(d) {
+    console.log(`${this.getMonthName(this.monthIndex)}/${d+1}/${this.currentYear}`);
+    console.log(this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${d+1}/${this.currentYear}`));
+  }
+
   getTotalNumberOfDays() {
-    const totalNumberOfDays = this.daysInMonth(this.index + 1, this.currentYear);
+    const totalNumberOfDays = this.daysInMonth(this.monthIndex + 1, this.currentYear);
     this.numberOfDaysInMonth = Array(totalNumberOfDays).fill(0).map((x,i)=>i);
     this.numberOfDaysInMonth.map(m => {
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'sunday') {
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'sunday') {
         this.weekDays.sunday.push(m + 1); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'monday') {
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'monday') {
         this.weekDays.monday.push(m + 1); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'tuesday') {
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'tuesday') {
         this.weekDays.tuesday.push(m + 1); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'wednesday') {
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'wednesday') {
         this.weekDays.wednesday.push(m + 1); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'thursday') {
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'thursday') {
         this.weekDays.thursday.push(m + 1); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'friday') {
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'friday') {
         this.weekDays.friday.push(m + 1); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.index)}/${m+1}/${this.currentYear}`) === 'saturday') {
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'saturday') {
         this.weekDays.saturday.push(m + 1); 
       }
     });
@@ -185,6 +232,8 @@ export class AppComponent {
       this.weekDays.thursday = this.attachEventsToTheDate(this.weekDays.thursday);
       this.weekDays.friday = this.attachEventsToTheDate(this.weekDays.friday);
       this.weekDays.saturday = this.attachEventsToTheDate(this.weekDays.saturday);
+      this.getWeekOfTheMonth(0);
+      console.log('sunday', this.weekDays.sunday);
     });
   }
 
@@ -206,6 +255,16 @@ export class AppComponent {
 
   daysInMonth(month, year) {
     return new Date(year, month, 0).getDate();
+  }
+
+  onCalendarViewTypeChange(event) {
+    console.log(event);
+    if (event === 'week') {
+      this.getWeekOfTheMonth(0);
+    }
+    if (event === 'day') {
+      this.getDayOfTheMonth(1);
+    }
   }
 
   calculateDayBasedOnDate(dateInput) {
