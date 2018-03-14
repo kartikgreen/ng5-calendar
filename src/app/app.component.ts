@@ -188,6 +188,7 @@ export class AppComponent {
   }
 
   getDayOfTheMonth(d) {
+    console.log('tot number of days', this.daysInMonth(this.monthIndex + 1, this.currentYear));
     console.log(`${this.getMonthName(this.monthIndex)}/${d+1}/${this.currentYear}`);
     console.log(this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${d+1}/${this.currentYear}`));
   }
