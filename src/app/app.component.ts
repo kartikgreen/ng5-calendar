@@ -14,8 +14,13 @@ export class AppComponent {
   weekWiseWeekDays: any = {};
   monthIndex: number = 0;
   weekIndex: number = 0;
+  dayIndex: number = 0;
+  dayNameOfTheMonth;
   beginningOfTheWeek;
   calendarViewType;
+  dayOfTheMonth;
+  dayWithEvents;
+  eventsPerDayOfTheMonth;
   eventsDatas = [
     {
       "...": []
@@ -88,12 +93,12 @@ export class AppComponent {
     });
   }
 
-  attachEventsToTheDate(week_days) {
+  attachEventsToTheDate(days) {
     const currentEventsData= this.eventsData.data.filter(x => {
       const month = this.getMonthName(x.month - 1);
       return x.year === this.currentYear && month === this.getMonthName(this.monthIndex);
     });
-    return week_days.map((x) => {
+    return days.map((x) => {
       const eventInfo = currentEventsData.find(y =>  y.date == x);
       if(eventInfo) { 
           return {[x]: eventInfo.events}
@@ -111,16 +116,6 @@ export class AppComponent {
     this.weekDays.thursday = [];
     this.weekDays.friday = [];
     this.weekDays.saturday = [];
-  }
-
-  resetWeekWiseWeekDays() {
-    this.weekWiseWeekDays.sunday = [];
-    this.weekWiseWeekDays.monday = [];
-    this.weekWiseWeekDays.tuesday = [];
-    this.weekWiseWeekDays.wednesday = [];
-    this.weekWiseWeekDays.thursday = [];
-    this.weekWiseWeekDays.friday = [];
-    this.weekWiseWeekDays.saturday = [];
   }
 
   getMonthName(index) {
@@ -159,6 +154,22 @@ export class AppComponent {
     }
     this.getTotalNumberOfDays();
   }
+  
+  previousDayClicked() {
+    this.dayIndex --;
+    if (this.dayIndex < 0) {
+      this.dayIndex = this.daysInMonth(this.monthIndex + 1, this.currentYear)-1;
+    }
+    this.getDayOfTheMonth(this.dayIndex);
+  }
+  
+  nextDayClicked() {
+    this.dayIndex ++;
+    if (this.dayIndex >= this.daysInMonth(this.monthIndex + 1, this.currentYear)) {
+      this.dayIndex = 0;
+    }
+    this.getDayOfTheMonth(this.dayIndex);
+  }
 
   previousWeekButtonClicked() {
     this.weekIndex --;
@@ -177,7 +188,6 @@ export class AppComponent {
   }
 
   getWeekOfTheMonth(i) {
-    console.log('i-', i);
     this.weekWiseWeekDays.sunday = this.weekDays.sunday.filter(x => x === this.weekDays.sunday[i]);
     this.weekWiseWeekDays.monday = this.weekDays.monday.filter(x => x === this.weekDays.monday[i]);
     this.weekWiseWeekDays.tuesday = this.weekDays.tuesday.filter(x => x === this.weekDays.tuesday[i]);
@@ -187,10 +197,12 @@ export class AppComponent {
     this.weekWiseWeekDays.saturday = this.weekDays.saturday.filter(x => x === this.weekDays.saturday[i]);
   }
 
-  getDayOfTheMonth(d) {
-    console.log('tot number of days', this.daysInMonth(this.monthIndex + 1, this.currentYear));
-    console.log(`${this.getMonthName(this.monthIndex)}/${d+1}/${this.currentYear}`);
-    console.log(this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${d+1}/${this.currentYear}`));
+  getDayOfTheMonth(i) {
+    this.dayNameOfTheMonth = this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${i+1}/${this.currentYear}`);
+    const dayWithEvents = this.attachEventsToTheDate(this.numberOfDaysInMonth.map(x => x + 1));
+    this.dayOfTheMonth = Object.keys(dayWithEvents[i]).toString();
+    Object.values(dayWithEvents[i]).map(x => this.eventsPerDayOfTheMonth = x);
+    return;
   }
 
   getTotalNumberOfDays() {
@@ -233,8 +245,10 @@ export class AppComponent {
       this.weekDays.thursday = this.attachEventsToTheDate(this.weekDays.thursday);
       this.weekDays.friday = this.attachEventsToTheDate(this.weekDays.friday);
       this.weekDays.saturday = this.attachEventsToTheDate(this.weekDays.saturday);
-      this.getWeekOfTheMonth(0);
-      console.log('sunday', this.weekDays.sunday);
+      this.weekIndex = 0;
+      this.getWeekOfTheMonth(this.weekIndex);
+      this.dayIndex = 0;
+      this.getDayOfTheMonth(this.dayIndex);
     });
   }
 
@@ -261,10 +275,12 @@ export class AppComponent {
   onCalendarViewTypeChange(event) {
     console.log(event);
     if (event === 'week') {
+      this.weekIndex = 0;
       this.getWeekOfTheMonth(0);
     }
     if (event === 'day') {
-      this.getDayOfTheMonth(1);
+      this.dayIndex = 0;
+      this.getDayOfTheMonth(0);
     }
   }
 

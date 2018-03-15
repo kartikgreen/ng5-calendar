@@ -1,4 +1,3 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
     Event's Calendar View
@@ -45,14 +44,28 @@
       <thead *ngIf="calendarViewType === 'day'">
         <tr>
           <th>
-            Monday
+            {{dayNameOfTheMonth}}
           </th>
+          <span *ngIf="calendarViewType === 'day'">
+            <span><a (click)="previousDayClicked()">Previous Day</a></span>
+            <span><a (click)="nextDayClicked()">Next Day</a></span>
+          </span>
         </tr>
+      
       </thead>
       <tbody *ngIf="calendarViewType === 'day'">
           <tr>
             <td>
-              3
+              {{this.dayOfTheMonth}}
+              <div *ngFor='let events of eventsPerDayOfTheMonth; let i = index'>
+                <span *ngIf="i <= 1">{{events.events_name}}</span>
+                <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                  <a class="fa fa-plus" aria-hidden="true" 
+                    title="Click here to view more..." 
+                    (click)="showEvents(eventsPerDayOfTheMonth)">More...
+                  </a>
+                  </label>
+              </div>
             </td>
           </tr>
       </tbody>
@@ -221,6 +234,6 @@
         </tr>
     </tbody>
     </table>
-    <!-- <pre>{{this.weekDays.sunday | json}}</pre> -->
+    <!-- <pre>{{this.eventsPerDayOfTheMonth | json}}</pre> -->
   </div>
 </div>
