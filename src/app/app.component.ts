@@ -12,7 +12,7 @@ export class AppComponent {
   numberOfDaysInMonth: any;
   weekDays: any = {};
   weekWiseWeekDays: any = {};
-  monthIndex: number = 0;
+  monthIndex: number = new Date().getMonth();
   weekIndex: number = 0;
   dayIndex: number = 0;
   dayNameOfTheMonth;
@@ -21,28 +21,6 @@ export class AppComponent {
   dayOfTheMonth;
   dayWithEvents;
   eventsPerDayOfTheMonth;
-  eventsDatas = [
-    {
-      "...": []
-    },
-    {
-      "7": [
-        "event1",
-        "event2",
-        "event3"
-      ]
-    },
-    {
-      "14": []
-    },
-    {
-      "21": []
-    },
-    {
-      "28": []
-    }
-  ]
-  
   eventsData: any = {
     "data": [
         { "year": 2018, "month": 1, "date": 7, 
@@ -188,13 +166,14 @@ export class AppComponent {
   }
 
   getWeekOfTheMonth(i) {
-    this.weekWiseWeekDays.sunday = this.weekDays.sunday.filter(x => x === this.weekDays.sunday[i]);
+    this.weekWiseWeekDays.sunday = this.weekDays.sunday.filter(x => x === console.log('w i t', this.weekDays.sunday[i]));
     this.weekWiseWeekDays.monday = this.weekDays.monday.filter(x => x === this.weekDays.monday[i]);
     this.weekWiseWeekDays.tuesday = this.weekDays.tuesday.filter(x => x === this.weekDays.tuesday[i]);
     this.weekWiseWeekDays.wednesday = this.weekDays.wednesday.filter(x => x === this.weekDays.wednesday[i]);
     this.weekWiseWeekDays.thursday = this.weekDays.thursday.filter(x => x === this.weekDays.thursday[i]);
     this.weekWiseWeekDays.friday = this.weekDays.friday.filter(x => x === this.weekDays.friday[i]);
     this.weekWiseWeekDays.saturday = this.weekDays.saturday.filter(x => x === this.weekDays.saturday[i]);
+    console.log('weekwisedays',i, this.weekDays);
   }
 
   getDayOfTheMonth(i) {
@@ -275,12 +254,15 @@ export class AppComponent {
   onCalendarViewTypeChange(event) {
     console.log(event);
     if (event === 'week') {
+      if (this.monthIndex === new Date().getMonth()) {
+        console.log('you are on current month');
+      }
       this.weekIndex = 0;
-      this.getWeekOfTheMonth(0);
+      this.getWeekOfTheMonth(this.weekIndex);
     }
     if (event === 'day') {
       this.dayIndex = 0;
-      this.getDayOfTheMonth(0);
+      this.getDayOfTheMonth(this.dayIndex);
     }
   }
 
