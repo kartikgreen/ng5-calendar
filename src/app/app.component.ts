@@ -20,10 +20,12 @@ export class AppComponent {
   calendarViewType;
   dayOfTheMonth;
   dayWithEvents;
+  currentMonth: number = new Date().getMonth();
+  currentDate: string = new Date().getDate().toString();
   eventsPerDayOfTheMonth;
   eventsData: any = {
     "data": [
-        { "year": 2018, "month": 1, "date": 7, 
+        { "year": 2018, "month": 1, "date": 27, 
          "events": [
            {"events_name": 'test name1', "events_location": 'Brampton'},
            {"events_name": 'test name2', "events_location": 'Toronto'},
@@ -44,7 +46,7 @@ export class AppComponent {
           {"events_name": 'test name9', "events_location": 'Scarborough'}
          ] 
         },
-        { "year": 2018, "month": 6, "date": 9, 
+        { "year": 2018, "month": 3, "date": 14, 
         "events": [
           {"events_name": 'test name10', "events_location": 'Brampton'},
           {"events_name": 'test name11', "events_location": 'Toronto'},
@@ -77,11 +79,17 @@ export class AppComponent {
       return x.year === this.currentYear && month === this.getMonthName(this.monthIndex);
     });
     return days.map((x) => {
-      const eventInfo = currentEventsData.find(y =>  y.date == x);
-      if(eventInfo) { 
-          return {[x]: eventInfo.events}
+      const currentEventInfo = currentEventsData.find(y =>  y.date == x);
+      console.log('event info', currentEventInfo);
+      if(currentEventInfo) { 
+          return {[x]: currentEventInfo.events}
       } else {
-          return {[x]: []}
+        if (this.monthIndex === new Date().getMonth()) {
+          if (x === new Date().getDate()) {
+            return {[x]: ['Today']}
+          }
+        }
+        return {[x]: []}
       }
     })
   }
@@ -152,28 +160,27 @@ export class AppComponent {
   previousWeekButtonClicked() {
     this.weekIndex --;
     if (this.weekIndex < 0) {
-      this.weekIndex = 4;
+      this.weekIndex = this.calculateNumberOfRowsForCurrentMonth() - 1;
     }
     this.getWeekOfTheMonth(this.weekIndex);
   }
 
   nextWeekButtonClicked() {
     this.weekIndex ++;
-    if (this.weekIndex >= 5) {
+    if (this.weekIndex >= this.calculateNumberOfRowsForCurrentMonth()) {
       this.weekIndex = 0;
     }
     this.getWeekOfTheMonth(this.weekIndex);
   }
 
   getWeekOfTheMonth(i) {
-    this.weekWiseWeekDays.sunday = this.weekDays.sunday.filter(x => x === console.log('w i t', this.weekDays.sunday[i]));
+    this.weekWiseWeekDays.sunday = this.weekDays.sunday.filter(x => x === this.weekDays.sunday[i]);
     this.weekWiseWeekDays.monday = this.weekDays.monday.filter(x => x === this.weekDays.monday[i]);
     this.weekWiseWeekDays.tuesday = this.weekDays.tuesday.filter(x => x === this.weekDays.tuesday[i]);
     this.weekWiseWeekDays.wednesday = this.weekDays.wednesday.filter(x => x === this.weekDays.wednesday[i]);
     this.weekWiseWeekDays.thursday = this.weekDays.thursday.filter(x => x === this.weekDays.thursday[i]);
     this.weekWiseWeekDays.friday = this.weekDays.friday.filter(x => x === this.weekDays.friday[i]);
     this.weekWiseWeekDays.saturday = this.weekDays.saturday.filter(x => x === this.weekDays.saturday[i]);
-    console.log('weekwisedays',i, this.weekDays);
   }
 
   getDayOfTheMonth(i) {
@@ -231,6 +238,16 @@ export class AppComponent {
     });
   }
 
+  getCurrentWeek() {
+    this.weekIndex = Math.ceil((new Date().getDate() + this.getStartingDayOfTheWeek(this.dayNameOfTheMonth)) / 7)-1;
+    this.getWeekOfTheMonth(this.weekIndex);
+  }
+
+  calculateNumberOfRowsForCurrentMonth() {
+    return Math.ceil((this.daysInMonth(this.monthIndex + 1, this.currentYear) + 
+      this.getStartingDayOfTheWeek(this.dayNameOfTheMonth)) / 7);
+  }
+
   checkWhichWeekDaysHasOne() {
     const weekDays = this.weekDays;
     let beginningOfTheWeek;
@@ -252,10 +269,10 @@ export class AppComponent {
   }
 
   onCalendarViewTypeChange(event) {
-    console.log(event);
     if (event === 'week') {
       if (this.monthIndex === new Date().getMonth()) {
-        console.log('you are on current month');
+        this.getCurrentWeek();
+        return
       }
       this.weekIndex = 0;
       this.getWeekOfTheMonth(this.weekIndex);
@@ -299,4 +316,29 @@ export class AppComponent {
     return day;
   }
   
+  getStartingDayOfTheWeek(day) {
+    switch (day) {
+      case "sunday":
+          day = 0;
+          break;
+      case "monday":
+          day = 1;
+          break;
+      case "tuesday":
+          day = 2;
+          break;
+      case "wednesday":
+          day = 3;
+          break;
+      case "thursday":
+          day = 4;
+          break;
+      case "friday":
+          day = 5;
+          break;
+      case "saturday":
+          day = 6;
+    }
+    return day;
+  }
 }

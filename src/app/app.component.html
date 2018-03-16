@@ -41,41 +41,43 @@
           <th>Saturday</th>
         </tr>
       </thead>
-      <thead *ngIf="calendarViewType === 'day'">
-        <tr>
-          <th>
-            {{dayNameOfTheMonth}}
-          </th>
-          <span *ngIf="calendarViewType === 'day'">
-            <span><a (click)="previousDayClicked()">Previous Day</a></span>
-            <span><a (click)="nextDayClicked()">Next Day</a></span>
-          </span>
-        </tr>
-      
-      </thead>
-      <tbody *ngIf="calendarViewType === 'day'">
+      <ng-container *ngIf="calendarViewType === 'day'">
+        <thead>
           <tr>
-            <td>
-              {{this.dayOfTheMonth}}
-              <div *ngFor='let events of eventsPerDayOfTheMonth; let i = index'>
-                <span *ngIf="i <= 1">{{events.events_name}}</span>
-                <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
-                  <a class="fa fa-plus" aria-hidden="true" 
-                    title="Click here to view more..." 
-                    (click)="showEvents(eventsPerDayOfTheMonth)">More...
-                  </a>
-                  </label>
-              </div>
-            </td>
+            <th>
+              {{dayNameOfTheMonth}}
+            </th>
+            <span>
+              <span><a (click)="previousDayClicked()">Previous Day</a></span>
+              <span><a (click)="nextDayClicked()">Next Day</a></span>
+            </span>
           </tr>
-      </tbody>
+        
+        </thead>
+        <tbody>
+            <tr>
+              <td>
+                {{this.dayOfTheMonth}}
+                <div *ngFor='let events of eventsPerDayOfTheMonth; let i = index'>
+                  <span *ngIf="i <= 1">{{events.events_name}}</span>
+                  <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                    <a class="fa fa-plus" aria-hidden="true" 
+                      title="Click here to view more..." 
+                      (click)="showEvents(eventsPerDayOfTheMonth)">More...
+                    </a>
+                    </label>
+                </div>
+              </td>
+            </tr>
+        </tbody>
+      </ng-container>
       <tbody *ngIf="calendarViewType !== 'week' && calendarViewType !== 'day'">
           <tr>
             <td>
                 <ng-container *ngFor="let key of this.weekDays.sunday | valuesPipe">
                         <tr *ngFor='let sunday of key.value | valuesPipe'> 
                           <td style="border-left: 5px solid red">
-                            {{sunday.key}}
+                            {{sunday.key}} <span style="color: green" *ngIf="sunday.key === this.currentDate && currentMonth === monthIndex">Today</span>
                             <div *ngFor='let events of sunday.value; let i = index'>
                               <span *ngIf="i <= 1">{{events.events_name}}</span>
                               <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -90,64 +92,112 @@
                 </ng-container>
             </td>
             <td>
-                <ng-container *ngFor="let key of this.weekDays.monday | valuesPipe">
-                        <tr *ngFor='let monday of key.value | valuesPipe'> 
-                          <td style="border-left: 5px solid red">
-                            {{monday.key}}
-                            <div *ngFor='let events of monday.value'>{{events}}</div>
-                          </td>
-                        </tr>
-                </ng-container>
+              <ng-container *ngFor="let key of this.weekDays.monday | valuesPipe">
+                <tr *ngFor='let monday of key.value | valuesPipe'> 
+                  <td style="border-left: 5px solid red">
+                    {{monday.key}} <span style="color: green" *ngIf="monday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <div *ngFor='let events of monday.value; let i = index'>
+                      <span *ngIf="i <= 1">{{events.events_name}}</span>
+                      <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                        <a class="fa fa-plus" aria-hidden="true" 
+                          title="Click here to view more..." 
+                          (click)="showEvents(monday.value)">More...
+                        </a>
+                        </label>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
             </td>
             <td>
-                <ng-container *ngFor="let key of this.weekDays.tuesday | valuesPipe">
-                        <tr *ngFor='let tuesday of key.value | valuesPipe'> 
-                          <td style="border-left: 5px solid red">
-                            {{tuesday.key}}
-                            <div *ngFor='let events of tuesday.value'>{{events}}</div>
-                          </td>
-                        </tr>
-                </ng-container>
+              <ng-container *ngFor="let key of this.weekDays.tuesday | valuesPipe">
+                <tr *ngFor='let tuesday of key.value | valuesPipe'> 
+                  <td style="border-left: 5px solid red">
+                    {{tuesday.key}} <span style="color: green" *ngIf="tuesday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <div *ngFor='let events of tuesday.value; let i = index'>
+                      <span *ngIf="i <= 1">{{events.events_name}}</span>
+                      <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                        <a class="fa fa-plus" aria-hidden="true" 
+                          title="Click here to view more..." 
+                          (click)="showEvents(tuesday.value)">More...
+                        </a>
+                        </label>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
             </td>
             <td>
-                <ng-container *ngFor="let key of this.weekDays.wednesday | valuesPipe">
-                        <tr *ngFor='let wednesday of key.value | valuesPipe'> 
-                          <td style="border-left: 5px solid red">
-                            {{wednesday.key}}
-                            <div *ngFor='let events of wednesday.value'>{{events}}</div>
-                          </td>
-                        </tr>
-                </ng-container>
+              <ng-container *ngFor="let key of this.weekDays.wednesday | valuesPipe">
+                <tr *ngFor='let wednesday of key.value | valuesPipe'> 
+                  <td style="border-left: 5px solid red">
+                    {{wednesday.key}} <span style="color: green" *ngIf="wednesday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <div *ngFor='let events of wednesday.value; let i = index'>
+                      <span *ngIf="i <= 1">{{events.events_name}}</span>
+                      <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                        <a class="fa fa-plus" aria-hidden="true" 
+                          title="Click here to view more..." 
+                          (click)="showEvents(wednesday.value)">More...
+                        </a>
+                        </label>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
             </td>
             <td>
-                <ng-container *ngFor="let key of this.weekDays.thursday | valuesPipe">
-                        <tr *ngFor='let thursday of key.value | valuesPipe'> 
-                          <td style="border-left: 5px solid red">
-                            {{thursday.key}}
-                            <div *ngFor='let events of thursday.value'>{{events}}</div>
-                          </td>
-                        </tr>
-                </ng-container>
+              <ng-container *ngFor="let key of this.weekDays.thursday | valuesPipe">
+                <tr *ngFor='let thursday of key.value | valuesPipe'> 
+                  <td style="border-left: 5px solid red">
+                    {{thursday.key}} <span style="color: green" *ngIf="thursday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <div *ngFor='let events of thursday.value; let i = index'>
+                      <span *ngIf="i <= 1">{{events.events_name}}</span>
+                      <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                        <a class="fa fa-plus" aria-hidden="true" 
+                          title="Click here to view more..." 
+                          (click)="showEvents(thursday.value)">More...
+                        </a>
+                        </label>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
             </td>
             <td>
-                <ng-container *ngFor="let key of this.weekDays.friday | valuesPipe">
-                        <tr *ngFor='let friday of key.value | valuesPipe'> 
-                          <td style="border-left: 5px solid red">
-                            {{friday.key}}
-                            <div *ngFor='let events of friday.value'>{{events}}</div>
-                          </td>
-                        </tr>
-                </ng-container>
+              <ng-container *ngFor="let key of this.weekDays.friday | valuesPipe">
+                <tr *ngFor='let friday of key.value | valuesPipe'> 
+                  <td style="border-left: 5px solid red">
+                    {{friday.key}} <span style="color: green" *ngIf="friday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <div *ngFor='let events of friday.value; let i = index'>
+                      <span *ngIf="i <= 1">{{events.events_name}}</span>
+                      <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                        <a class="fa fa-plus" aria-hidden="true" 
+                          title="Click here to view more..." 
+                          (click)="showEvents(friday.value)">More...
+                        </a>
+                        </label>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
             </td>
             <td>
-                <ng-container *ngFor="let key of this.weekDays.saturday | valuesPipe">
-                        <tr *ngFor='let saturday of key.value | valuesPipe'> 
-                          <td style="border-left: 5px solid red">
-                            {{saturday.key}}
-                            <div *ngFor='let events of saturday.value'>{{events}}</div>
-                          </td>
-                        </tr>
-                </ng-container>
+              <ng-container *ngFor="let key of this.weekDays.saturday | valuesPipe">
+                <tr *ngFor='let saturday of key.value | valuesPipe'> 
+                  <td style="border-left: 5px solid red">
+                    {{saturday.key}} <span style="color: green" *ngIf="saturday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <div *ngFor='let events of saturday.value; let i = index'>
+                      <span *ngIf="i <= 1">{{events.events_name}}</span>
+                      <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                        <a class="fa fa-plus" aria-hidden="true" 
+                          title="Click here to view more..." 
+                          (click)="showEvents(saturday.value)">More...
+                        </a>
+                        </label>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
             </td>
           </tr>
       </tbody>
@@ -157,7 +207,7 @@
               <ng-container *ngFor="let key of this.weekWiseWeekDays.sunday | valuesPipe">
                       <tr *ngFor='let sunday of key.value | valuesPipe'> 
                         <td style="border-left: 5px solid red">
-                          {{sunday.key}}
+                          {{sunday.key}} <span style="color: green" *ngIf="sunday.key === this.currentDate && currentMonth === monthIndex">Today</span>
                           <div *ngFor='let events of sunday.value; let i = index'>
                             <span *ngIf="i <= 1">{{events.events_name}}</span>
                             <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -172,68 +222,116 @@
               </ng-container>
           </td>
           <td>
-              <ng-container *ngFor="let key of this.weekWiseWeekDays.monday | valuesPipe">
-                      <tr *ngFor='let monday of key.value | valuesPipe'> 
-                        <td style="border-left: 5px solid red">
-                          {{monday.key}}
-                          <div *ngFor='let events of monday.value'>{{events}}</div>
-                        </td>
-                      </tr>
-              </ng-container>
+            <ng-container *ngFor="let key of this.weekWiseWeekDays.monday | valuesPipe">
+              <tr *ngFor='let monday of key.value | valuesPipe'> 
+                <td style="border-left: 5px solid red">
+                  {{monday.key}} <span style="color: green" *ngIf="monday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                  <div *ngFor='let events of monday.value; let i = index'>
+                    <span *ngIf="i <= 1">{{events.events_name}}</span>
+                    <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                      <a class="fa fa-plus" aria-hidden="true" 
+                        title="Click here to view more..." 
+                        (click)="showEvents(monday.value)">More...
+                      </a>
+                      </label>
+                  </div>
+                </td>
+              </tr>
+          </ng-container>
           </td>
           <td>
-              <ng-container *ngFor="let key of this.weekWiseWeekDays.tuesday | valuesPipe">
-                      <tr *ngFor='let tuesday of key.value | valuesPipe'> 
-                        <td style="border-left: 5px solid red">
-                          {{tuesday.key}}
-                          <div *ngFor='let events of tuesday.value'>{{events}}</div>
-                        </td>
-                      </tr>
-              </ng-container>
+            <ng-container *ngFor="let key of this.weekWiseWeekDays.tuesday | valuesPipe">
+              <tr *ngFor='let tuesday of key.value | valuesPipe'> 
+                <td style="border-left: 5px solid red">
+                  {{tuesday.key}} <span style="color: green" *ngIf="tuesday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                  <div *ngFor='let events of tuesday.value; let i = index'>
+                    <span *ngIf="i <= 1">{{events.events_name}}</span>
+                    <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                      <a class="fa fa-plus" aria-hidden="true" 
+                        title="Click here to view more..." 
+                        (click)="showEvents(tuesday.value)">More...
+                      </a>
+                      </label>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
           </td>
           <td>
-              <ng-container *ngFor="let key of this.weekWiseWeekDays.wednesday | valuesPipe">
-                      <tr *ngFor='let wednesday of key.value | valuesPipe'> 
-                        <td style="border-left: 5px solid red">
-                          {{wednesday.key}}
-                          <div *ngFor='let events of wednesday.value'>{{events}}</div>
-                        </td>
-                      </tr>
-              </ng-container>
+            <ng-container *ngFor="let key of this.weekWiseWeekDays.wednesday | valuesPipe">
+              <tr *ngFor='let wednesday of key.value | valuesPipe'> 
+                <td style="border-left: 5px solid red">
+                  {{wednesday.key}} <span style="color: green" *ngIf="wednesday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                  <div *ngFor='let events of wednesday.value; let i = index'>
+                    <span *ngIf="i <= 1">{{events.events_name}}</span>
+                    <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                      <a class="fa fa-plus" aria-hidden="true" 
+                        title="Click here to view more..." 
+                        (click)="showEvents(wednesday.value)">More...
+                      </a>
+                      </label>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
           </td>
           <td>
-              <ng-container *ngFor="let key of this.weekWiseWeekDays.thursday | valuesPipe">
-                      <tr *ngFor='let thursday of key.value | valuesPipe'> 
-                        <td style="border-left: 5px solid red">
-                          {{thursday.key}}
-                          <div *ngFor='let events of thursday.value'>{{events}}</div>
-                        </td>
-                      </tr>
-              </ng-container>
+            <ng-container *ngFor="let key of this.weekWiseWeekDays.thursday | valuesPipe">
+              <tr *ngFor='let thursday of key.value | valuesPipe'> 
+                <td style="border-left: 5px solid red">
+                  {{thursday.key}} <span style="color: green" *ngIf="thursday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                  <div *ngFor='let events of thursday.value; let i = index'>
+                    <span *ngIf="i <= 1">{{events.events_name}}</span>
+                    <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                      <a class="fa fa-plus" aria-hidden="true" 
+                        title="Click here to view more..." 
+                        (click)="showEvents(thursday.value)">More...
+                      </a>
+                      </label>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
           </td>
           <td>
-              <ng-container *ngFor="let key of this.weekWiseWeekDays.friday | valuesPipe">
-                      <tr *ngFor='let friday of key.value | valuesPipe'> 
-                        <td style="border-left: 5px solid red">
-                          {{friday.key}}
-                          <div *ngFor='let events of friday.value'>{{events}}</div>
-                        </td>
-                      </tr>
-              </ng-container>
+            <ng-container *ngFor="let key of this.weekWiseWeekDays.friday | valuesPipe">
+              <tr *ngFor='let friday of key.value | valuesPipe'> 
+                <td style="border-left: 5px solid red">
+                  {{friday.key}} <span style="color: green" *ngIf="friday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                  <div *ngFor='let events of friday.value; let i = index'>
+                    <span *ngIf="i <= 1">{{events.events_name}}</span>
+                    <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                      <a class="fa fa-plus" aria-hidden="true" 
+                        title="Click here to view more..." 
+                        (click)="showEvents(friday.value)">More...
+                      </a>
+                      </label>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
           </td>
           <td>
-              <ng-container *ngFor="let key of this.weekWiseWeekDays.saturday | valuesPipe">
-                      <tr *ngFor='let saturday of key.value | valuesPipe'> 
-                        <td style="border-left: 5px solid red">
-                          {{saturday.key}}
-                          <div *ngFor='let events of saturday.value'>{{events}}</div>
-                        </td>
-                      </tr>
-              </ng-container>
+            <ng-container *ngFor="let key of this.weekWiseWeekDays.saturday | valuesPipe">
+              <tr *ngFor='let saturday of key.value | valuesPipe'> 
+                <td style="border-left: 5px solid red">
+                  {{saturday.key}} <span style="color: green" *ngIf="saturday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                  <div *ngFor='let events of saturday.value; let i = index'>
+                    <span *ngIf="i <= 1">{{events.events_name}}</span>
+                    <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
+                      <a class="fa fa-plus" aria-hidden="true" 
+                        title="Click here to view more..." 
+                        (click)="showEvents(saturday.value)">More...
+                      </a>
+                      </label>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
           </td>
         </tr>
     </tbody>
     </table>
-    <pre>{{this.weekWiseWeekDays | json}}</pre>
+    <pre>{{this.weekDays | json}}</pre>
   </div>
 </div>
