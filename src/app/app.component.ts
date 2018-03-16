@@ -160,6 +160,7 @@ export class AppComponent {
   previousWeekButtonClicked() {
     this.weekIndex --;
     if (this.weekIndex < 0) {
+      this.previousButtonClicked()
       this.weekIndex = this.calculateNumberOfRowsForCurrentMonth() - 1;
     }
     this.getWeekOfTheMonth(this.weekIndex);
@@ -169,6 +170,7 @@ export class AppComponent {
     this.weekIndex ++;
     if (this.weekIndex >= this.calculateNumberOfRowsForCurrentMonth()) {
       this.weekIndex = 0;
+      this.nextButtonClicked();
     }
     this.getWeekOfTheMonth(this.weekIndex);
   }
@@ -243,6 +245,11 @@ export class AppComponent {
     this.getWeekOfTheMonth(this.weekIndex);
   }
 
+  getCurrentDay() {
+    this.dayIndex = new Date().getDate()-1;
+    this.getDayOfTheMonth(this.dayIndex);
+  }
+
   calculateNumberOfRowsForCurrentMonth() {
     return Math.ceil((this.daysInMonth(this.monthIndex + 1, this.currentYear) + 
       this.getStartingDayOfTheWeek(this.dayNameOfTheMonth)) / 7);
@@ -278,6 +285,11 @@ export class AppComponent {
       this.getWeekOfTheMonth(this.weekIndex);
     }
     if (event === 'day') {
+      if (this.monthIndex === new Date().getMonth()) {
+        this.getCurrentWeek();
+        this.getCurrentDay();
+        return
+      }
       this.dayIndex = 0;
       this.getDayOfTheMonth(this.dayIndex);
     }

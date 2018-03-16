@@ -58,6 +58,7 @@
             <tr>
               <td>
                 {{this.dayOfTheMonth}}
+                <div style="color: green" *ngIf="this.dayOfTheMonth === this.currentDate && currentMonth === monthIndex">Today</div>
                 <div *ngFor='let events of eventsPerDayOfTheMonth; let i = index'>
                   <span *ngIf="i <= 1">{{events.events_name}}</span>
                   <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
