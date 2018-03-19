@@ -18,28 +18,31 @@ export class AppComponent {
   dayNameOfTheMonth;
   beginningOfTheWeek;
   calendarViewType;
+  monthHighlight: boolean = false;
   dayOfTheMonth;
   dayWithEvents;
+  testData: any;
   currentMonth: number = new Date().getMonth();
   currentDate: string = new Date().getDate().toString();
   eventsPerDayOfTheMonth;
+  monthWiseDays: any = {};
   eventsData: any = {
     "data": [
-        { "year": 2018, "month": 1, "date": 27, 
+        { "year": 2018, "month": 5, "date": 1, 
          "events": [
            {"events_name": 'test name1', "events_location": 'Brampton'},
            {"events_name": 'test name2', "events_location": 'Toronto'},
            {"events_name": 'test name3', "events_location": 'Scarborough'}
           ] 
         },
-        { "year": 2018, "month": 1, "date": 28, 
+        { "year": 2018, "month": 5, "date": 2, 
          "events": [
            {"events_name": 'test name4', "events_location": 'Brampton'},
            {"events_name": 'test name5', "events_location": 'Toronto'},
            {"events_name": 'test name6', "events_location": 'Scarborough'}
           ] 
         },
-        { "year": 2018, "month": 2, "date": 18, 
+        { "year": 2018, "month": 2, "date": 28, 
         "events": [
           {"events_name": 'test name7', "events_location": 'Brampton'},
           {"events_name": 'test name8', "events_location": 'Toronto'},
@@ -80,18 +83,24 @@ export class AppComponent {
     });
     return days.map((x) => {
       const currentEventInfo = currentEventsData.find(y =>  y.date == x);
-      console.log('event info', currentEventInfo);
       if(currentEventInfo) { 
           return {[x]: currentEventInfo.events}
       } else {
-        if (this.monthIndex === new Date().getMonth()) {
-          if (x === new Date().getDate()) {
-            return {[x]: ['Today']}
-          }
-        }
         return {[x]: []}
       }
     })
+  }
+  attachEventsToOtherMonthsDate(date, year, month_index) {
+    const currentEventsData= this.eventsData.data.filter(x => {
+      const month = this.getMonthName(x.month - 1);
+      return x.year === year && month === this.getMonthName(month_index);
+    });
+    const currentEventInfo = currentEventsData.find(y =>  y.date == date);
+    if(currentEventInfo) { 
+        return {[date + '-other month']: currentEventInfo.events}
+    } else {
+      return {[date + '-other month']: []}
+    }
   }
 
   resetWeekDays() {
@@ -140,6 +149,28 @@ export class AppComponent {
     }
     this.getTotalNumberOfDays();
   }
+
+  getNextMonthDetails() {
+    if (this.monthIndex === 11) {
+      const nextMonth = 0;
+      const year = this.currentYear + 1;
+      return [nextMonth, year];
+    }
+    const nextMonth = this.monthIndex + 1;
+    const year = this.currentYear;
+    return [nextMonth, year];
+  }
+
+  getPreviousMonthDetails() {
+    if (this.monthIndex === 0) {
+      const previousMonth = 11;
+      const year = this.currentYear -1;
+      return [previousMonth, year];
+    }
+    const previousMonth = this.monthIndex - 1;
+    const year = this.currentYear;
+    return [previousMonth, year];
+  }
   
   previousDayClicked() {
     this.dayIndex --;
@@ -160,19 +191,27 @@ export class AppComponent {
   previousWeekButtonClicked() {
     this.weekIndex --;
     if (this.weekIndex < 0) {
-      this.previousButtonClicked()
+      // this.previousButtonClicked()
       this.weekIndex = this.calculateNumberOfRowsForCurrentMonth() - 1;
     }
     this.getWeekOfTheMonth(this.weekIndex);
   }
 
   nextWeekButtonClicked() {
+    let weekIndexSkipped = this.calculateNumberOfRowsForCurrentMonth();
     this.weekIndex ++;
-    if (this.weekIndex >= this.calculateNumberOfRowsForCurrentMonth()) {
+    if (this.getLastDayOfTheMonth() !== 'saturday') {
+      weekIndexSkipped = this.calculateNumberOfRowsForCurrentMonth()-1;
+    }
+    if (this.weekIndex >= weekIndexSkipped) {
       this.weekIndex = 0;
       this.nextButtonClicked();
     }
     this.getWeekOfTheMonth(this.weekIndex);
+  }
+  getLastDayOfTheMonth() {
+    return this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/
+      ${this.daysInMonth(this.monthIndex + 1, this.currentYear)}/${this.currentYear}`)
   }
 
   getWeekOfTheMonth(i) {
@@ -196,48 +235,69 @@ export class AppComponent {
   getTotalNumberOfDays() {
     const totalNumberOfDays = this.daysInMonth(this.monthIndex + 1, this.currentYear);
     this.numberOfDaysInMonth = Array(totalNumberOfDays).fill(0).map((x,i)=>i);
-    this.numberOfDaysInMonth.map(m => {
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'sunday') {
-        this.weekDays.sunday.push(m + 1); 
+    this.attachEventsToTheDate(this.numberOfDaysInMonth.map(x => x + 1)).map(m => {
+      const dayNumber = parseInt(Object.keys(m).toString());
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${dayNumber}/${this.currentYear}`) === 'sunday') {
+        this.weekDays.sunday.push(m); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'monday') {
-        this.weekDays.monday.push(m + 1); 
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${dayNumber}/${this.currentYear}`) === 'monday') {
+        this.weekDays.monday.push(m); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'tuesday') {
-        this.weekDays.tuesday.push(m + 1); 
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${dayNumber}/${this.currentYear}`) === 'tuesday') {
+        this.weekDays.tuesday.push(m); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'wednesday') {
-        this.weekDays.wednesday.push(m + 1); 
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${dayNumber}/${this.currentYear}`) === 'wednesday') {
+        this.weekDays.wednesday.push(m); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'thursday') {
-        this.weekDays.thursday.push(m + 1); 
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${dayNumber}/${this.currentYear}`) === 'thursday') {
+        this.weekDays.thursday.push(m); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'friday') {
-        this.weekDays.friday.push(m + 1); 
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${dayNumber}/${this.currentYear}`) === 'friday') {
+        this.weekDays.friday.push(m); 
       }
-      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${m+1}/${this.currentYear}`) === 'saturday') {
-        this.weekDays.saturday.push(m + 1); 
+      if (this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/${dayNumber}/${this.currentYear}`) === 'saturday') {
+        this.weekDays.saturday.push(m); 
       }
     });
-    this.checkWhichWeekDaysHasOne().then(x => {
-      let i: any = x;
+    this.getBeginningAndEndOfTheWeek().then(x => {
+      let totalNumberOfDaysInPreviousMonth = this.daysInMonth(this.getPreviousMonthDetails()[0] + 1, this.getPreviousMonthDetails()[1]);
+      let i: any = x[0];
       for (i <= 0; i--;) {
-        this.weekDays[this.calculateDayBasedOnDate(i)].unshift('...');
+        this.weekDays[this.calculateDayBasedOnDate(i)].unshift(this.attachEventsToOtherMonthsDate(totalNumberOfDaysInPreviousMonth, 
+          this.getPreviousMonthDetails()[1], this.getPreviousMonthDetails()[0]));
+        totalNumberOfDaysInPreviousMonth --;
       }
+      let k = 1;
+      for (let j: any = x[1] + 1; j <= 6;) {
+        this.weekDays[this.calculateDayBasedOnDate(j)].push(this.attachEventsToOtherMonthsDate(k, this.getNextMonthDetails()[1], 
+          this.getNextMonthDetails()[0]));
+        j++;
+        k++;
+      }
+      this.getNextMonthDetails();
+      this.monthWiseDays = this.weekDays;
     }).then(x => {
-      // Now we need to change the structure of json to attach events to the data
-      this.weekDays.sunday = this.attachEventsToTheDate(this.weekDays.sunday);
-      this.weekDays.monday = this.attachEventsToTheDate(this.weekDays.monday);
-      this.weekDays.tuesday = this.attachEventsToTheDate(this.weekDays.tuesday);
-      this.weekDays.wednesday = this.attachEventsToTheDate(this.weekDays.wednesday);
-      this.weekDays.thursday = this.attachEventsToTheDate(this.weekDays.thursday);
-      this.weekDays.friday = this.attachEventsToTheDate(this.weekDays.friday);
-      this.weekDays.saturday = this.attachEventsToTheDate(this.weekDays.saturday);
       this.weekIndex = 0;
       this.getWeekOfTheMonth(this.weekIndex);
       this.dayIndex = 0;
       this.getDayOfTheMonth(this.dayIndex);
     });
+  }
+  
+  getOtherMonthsDay(day) {
+    if (day.split('-')[1] === 'other month') {
+      return day.split('-')[0];
+    } else {
+      return day;
+    }
+  }
+
+  highlightOtherMonth(day) {
+    if (day.split('-')[1] === 'other month') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   getCurrentWeek() {
@@ -255,19 +315,24 @@ export class AppComponent {
       this.getStartingDayOfTheWeek(this.dayNameOfTheMonth)) / 7);
   }
 
-  checkWhichWeekDaysHasOne() {
+  getBeginningAndEndOfTheWeek() {
     const weekDays = this.weekDays;
     let beginningOfTheWeek;
+    let endOfTheWeek;
+    const totalNumberOfDays = this.daysInMonth(this.monthIndex + 1, this.currentYear)
     Object.keys(weekDays).forEach(function (key, index) {
       const weekdays = weekDays[key];
-      weekdays.map(o => { 
-        if (o === 1) {
+      weekdays.map(o => {
+        if (parseInt(Object.keys(o).toString()) === 1) {
            beginningOfTheWeek = index;
         }
+        if (parseInt(Object.keys(o).toString()) === totalNumberOfDays) {
+          endOfTheWeek = index;
+       }
       });
     });
     return new Promise((resolve, reject) => {
-      resolve(beginningOfTheWeek);
+      resolve([beginningOfTheWeek, endOfTheWeek]);
     });
   }
 
