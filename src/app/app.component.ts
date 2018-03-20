@@ -8,6 +8,7 @@ import {VERSION, MatDialog, MatDialogRef} from '@angular/material';
 })
 export class AppComponent {
   currentYear: number = (new Date()).getFullYear();
+  previousClicked: boolean = false;
   DialogRef: MatDialogRef<DialogComponent>;
   numberOfDaysInMonth: any;
   weekDays: any = {};
@@ -133,7 +134,7 @@ export class AppComponent {
   nextButtonClicked() {
     this.resetWeekDays();
     this.monthIndex += 1;
-    if (this.monthIndex >= 11) {
+    if (this.monthIndex > 11) {
       this.monthIndex = 0;
       this.currentYear ++;
     }
@@ -190,14 +191,23 @@ export class AppComponent {
 
   previousWeekButtonClicked() {
     this.weekIndex --;
-    if (this.weekIndex < 0) {
-      // this.previousButtonClicked()
+    if (this.getFirstDayOfTheMonth() === 'sunday') {
+      if (this.weekIndex === 1) {
+        this.previousButtonClicked();
+      }
+    }
+    
+    else if (this.weekIndex <= 0) {
+      this.previousClicked = true;
+      this.previousButtonClicked();
       this.weekIndex = this.calculateNumberOfRowsForCurrentMonth() - 1;
     }
     this.getWeekOfTheMonth(this.weekIndex);
+    console.log('weekindex', this.weekIndex);
   }
 
   nextWeekButtonClicked() {
+    this.previousClicked = false;
     let weekIndexSkipped = this.calculateNumberOfRowsForCurrentMonth();
     this.weekIndex ++;
     if (this.getLastDayOfTheMonth() !== 'saturday') {
@@ -213,8 +223,15 @@ export class AppComponent {
     return this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/
       ${this.daysInMonth(this.monthIndex + 1, this.currentYear)}/${this.currentYear}`)
   }
+  getFirstDayOfTheMonth() {
+    console.log(`${this.getMonthName(this.monthIndex - 1)}/
+    ${1}/${this.currentYear}`);
+    return this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex - 1)}/
+      ${1}/${this.currentYear}`)
+  }
 
   getWeekOfTheMonth(i) {
+    console.log('received', i);
     this.weekWiseWeekDays.sunday = this.weekDays.sunday.filter(x => x === this.weekDays.sunday[i]);
     this.weekWiseWeekDays.monday = this.weekDays.monday.filter(x => x === this.weekDays.monday[i]);
     this.weekWiseWeekDays.tuesday = this.weekDays.tuesday.filter(x => x === this.weekDays.tuesday[i]);
@@ -277,10 +294,18 @@ export class AppComponent {
       this.getNextMonthDetails();
       this.monthWiseDays = this.weekDays;
     }).then(x => {
-      this.weekIndex = 0;
-      this.getWeekOfTheMonth(this.weekIndex);
-      this.dayIndex = 0;
-      this.getDayOfTheMonth(this.dayIndex);
+      if (this.previousClicked) {
+        this.weekIndex = this.calculateNumberOfRowsForCurrentMonth() - 1;
+        console.log('when are you getting old', this.weekIndex);
+        this.getWeekOfTheMonth(this.weekIndex);
+        this.dayIndex = 0;
+        this.getDayOfTheMonth(this.dayIndex);
+      } else {
+        this.weekIndex = 0;
+        this.getWeekOfTheMonth(this.weekIndex);
+        this.dayIndex = 0;
+        this.getDayOfTheMonth(this.dayIndex);
+      }
     });
   }
   
