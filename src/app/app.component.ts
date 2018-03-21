@@ -25,7 +25,6 @@ export class AppComponent {
   monthHighlight: boolean = false;
   dayOfTheMonth;
   dayWithEvents;
-  testData: any;
   currentMonth: number = new Date().getMonth();
   currentDate: string = new Date().getDate().toString();
   eventsPerDayOfTheMonth;
@@ -66,7 +65,7 @@ export class AppComponent {
   constructor(private dialog: MatDialog) {}
   
   ngOnInit() {
-    console.log('currentYear', this.currentYear);
+    this.getMonthsFirstDateAndLastDate();
     this.resetWeekDays();
     this.getTotalNumberOfDays();
   }
@@ -96,6 +95,7 @@ export class AppComponent {
       }
     })
   }
+  
   attachEventsToOtherMonthsDate(date, year, month_index) {
     const currentEventsData= this.eventsData.data.filter(x => {
       const month = this.getMonthName(x.month - 1);
@@ -137,6 +137,11 @@ export class AppComponent {
   } 
 
   nextButtonClicked() {
+    if (this.weekView || this.dayView) {
+      this.monthView = false;
+    } else {
+      this.monthView = true;
+    }
     this.resetWeekDays();
     this.monthIndex += 1;
     if (this.monthIndex >= 11) {
@@ -144,6 +149,9 @@ export class AppComponent {
       this.currentYear ++;
     }
     return this.getTotalNumberOfDays().then(x => {
+      if (this.monthView) {
+        this.getMonthsFirstDateAndLastDate();
+      }
       return new Promise((resolve, reject) => {
         resolve(x);
       });
@@ -151,6 +159,11 @@ export class AppComponent {
   }
 
   previousButtonClicked() {
+    if (this.weekView || this.dayView) {
+      this.monthView = false;
+    } else {
+      this.monthView = true;
+    }
     this.resetWeekDays();
     this.monthIndex -= 1;
     if (this.monthIndex < 0) {
@@ -158,6 +171,9 @@ export class AppComponent {
       this.currentYear --;
     }
     return this.getTotalNumberOfDays().then(x => {
+      if (this.monthView) {
+        this.getMonthsFirstDateAndLastDate();
+      }
       return new Promise((resolve, reject) => {
         resolve(x);
       });
@@ -199,7 +215,15 @@ export class AppComponent {
     }
     this.getDayOfTheMonth(this.dayIndex);
   }
-  
+
+  getMonthsFirstDateAndLastDate() {
+    console.log(this.daysInMonth(this.monthIndex + 1, this.currentYear));
+  }
+
+  getWeeksFirstDateAndLastDate(i) {
+    console.log(this.weekWiseWeekDays.sunday[i], this.weekWiseWeekDays.saturday[i]);
+  }
+
   nextDayClicked() {
     this.dayIndex ++;
     if (this.dayIndex >= this.daysInMonth(this.monthIndex + 1, this.currentYear)) {
@@ -266,6 +290,7 @@ export class AppComponent {
   }
 
   getWeekOfTheMonth(i) {
+    console.log('get week of the month called');
     this.weekWiseWeekDays.sunday = this.weekDays.sunday.filter(x => x === this.weekDays.sunday[i]);
     this.weekWiseWeekDays.monday = this.weekDays.monday.filter(x => x === this.weekDays.monday[i]);
     this.weekWiseWeekDays.tuesday = this.weekDays.tuesday.filter(x => x === this.weekDays.tuesday[i]);
@@ -399,7 +424,6 @@ export class AppComponent {
       this.monthView = false;
       this.dayView = false;
       this.weekView = true;
-
       if (this.monthIndex === new Date().getMonth()) {
         this.getCurrentWeek();
         return
@@ -423,6 +447,7 @@ export class AppComponent {
       this.monthView = true;
       this.dayView = false;
       this.weekView = false;
+      this.getMonthsFirstDateAndLastDate();
     }
   }
 
