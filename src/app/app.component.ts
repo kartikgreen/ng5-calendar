@@ -10,6 +10,9 @@ export class AppComponent {
   currentYear: number = (new Date()).getFullYear();
   year: number = (new Date()).getFullYear();
   DialogRef: MatDialogRef<DialogComponent>;
+  weekView: boolean = false;
+  monthView: boolean = true;
+  dayView: boolean = false;
   numberOfDaysInMonth: any;
   weekDays: any = {};
   weekWiseWeekDays: any = {};
@@ -59,6 +62,7 @@ export class AppComponent {
         }
     ]
   }
+  
   constructor(private dialog: MatDialog) {}
   
   ngOnInit() {
@@ -185,7 +189,13 @@ export class AppComponent {
   previousDayClicked() {
     this.dayIndex --;
     if (this.dayIndex < 0) {
-      this.dayIndex = this.daysInMonth(this.monthIndex + 1, this.currentYear)-1;
+      this.previousButtonClicked().then(x => {
+        if (x === 'success') {
+          this.dayIndex = this.daysInMonth(this.monthIndex + 1, this.currentYear)-1;
+          this.getDayOfTheMonth(this.dayIndex);
+        }
+      });
+      return;
     }
     this.getDayOfTheMonth(this.dayIndex);
   }
@@ -193,7 +203,13 @@ export class AppComponent {
   nextDayClicked() {
     this.dayIndex ++;
     if (this.dayIndex >= this.daysInMonth(this.monthIndex + 1, this.currentYear)) {
-      this.dayIndex = 0;
+      this.nextButtonClicked().then(x => {
+        if (x === 'success') {
+          this.dayIndex = 0;
+          this.getDayOfTheMonth(this.dayIndex);
+        }
+      });
+      return;
     }
     this.getDayOfTheMonth(this.dayIndex);
   }
@@ -201,11 +217,9 @@ export class AppComponent {
   previousWeekButtonClicked() {
     this.weekIndex --;
     let hasSunday = false;
-
     if (this.getFirstDayOfTheMonth() === 'sunday') {
       hasSunday = true;
-    } 
-
+    }
     if (this.weekIndex < 0) {
         this.previousButtonClicked().then(x => {
           if (x === 'success') {
@@ -215,13 +229,11 @@ export class AppComponent {
               this.weekIndex = this.calculateNumberOfRowsForCurrentMonth() - 2;
             }
             this.getWeekOfTheMonth(this.weekIndex);
-            console.log('weekIndex', this.weekIndex, this.getMonthName(this.monthIndex), 'n o rows for cur month',this.calculateNumberOfRowsForCurrentMonth(), 'hasSunday',hasSunday);
           }
         });
         return;
     }
     this.getWeekOfTheMonth(this.weekIndex);
-    console.log('weekIndex', this.weekIndex, this.getMonthName(this.monthIndex), 'n o rows for cur month',this.calculateNumberOfRowsForCurrentMonth());
   }
 
   nextWeekButtonClicked() {
@@ -236,20 +248,19 @@ export class AppComponent {
         if (x === 'success') {
           this.weekIndex = 0;
           this.getWeekOfTheMonth(this.weekIndex);
-          console.log('weekIndex', this.weekIndex, this.getMonthName(this.monthIndex), 'n o rows for cur month',this.calculateNumberOfRowsForCurrentMonth());
         }
       });
       return;
     }
     this.getWeekOfTheMonth(this.weekIndex);
-    console.log('weekIndex', this.weekIndex, this.getMonthName(this.monthIndex), 'n o rows for cur month',this.calculateNumberOfRowsForCurrentMonth());
   }
+
   getLastDayOfTheMonth() {
     return this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/
       ${this.daysInMonth(this.monthIndex + 1, this.currentYear)}/${this.currentYear}`)
   }
+
   getFirstDayOfTheMonth() {
-    console.log('monthindex', this.monthIndex);
     return this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/
       ${1}/${this.currentYear}`)
   }
@@ -385,6 +396,10 @@ export class AppComponent {
 
   onCalendarViewTypeChange(event) {
     if (event === 'week') {
+      this.monthView = false;
+      this.dayView = false;
+      this.weekView = true;
+
       if (this.monthIndex === new Date().getMonth()) {
         this.getCurrentWeek();
         return
@@ -393,6 +408,9 @@ export class AppComponent {
       this.getWeekOfTheMonth(this.weekIndex);
     }
     if (event === 'day') {
+      this.monthView = false;
+      this.dayView = true;
+      this.weekView = false;
       if (this.monthIndex === new Date().getMonth()) {
         this.getCurrentWeek();
         this.getCurrentDay();
@@ -400,6 +418,11 @@ export class AppComponent {
       }
       this.dayIndex = 0;
       this.getDayOfTheMonth(this.dayIndex);
+    }
+    if (event === 'month') {
+      this.monthView = true;
+      this.dayView = false;
+      this.weekView = false;
     }
   }
 

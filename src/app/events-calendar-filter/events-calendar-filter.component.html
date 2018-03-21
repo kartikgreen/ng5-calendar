@@ -1,7 +1,19 @@
+<mat-form-field>
+  <mat-select [(ngModel)]="eventsLocation" (ngModelChange)="onEventsLocationChange($event)" placeholder="Select Location">
+    <mat-option value="1">
+      Brampton
+    </mat-option>
+    <mat-option value="2">
+      Scarborough
+    </mat-option>
+    <mat-option value="3">
+      Toronto
+    </mat-option>
+  </mat-select>
+</mat-form-field>
 <div class="example-container mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource">
 
-    <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -17,7 +29,6 @@
       </mat-cell>
     </ng-container>
 
-    <!-- Position Column -->
     <ng-container matColumnDef="position">
       <mat-header-cell *matHeaderCellDef> Show All Categories</mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.category}} </mat-cell>
@@ -29,8 +40,3 @@
     </mat-row>
   </mat-table>
 </div>
-
-
-<!-- Copyright 2018 Google Inc. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license -->

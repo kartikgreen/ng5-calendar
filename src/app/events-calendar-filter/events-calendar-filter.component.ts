@@ -16,13 +16,20 @@ export class EventsCalendarFilterComponent  {
   dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
   selection = new SelectionModel<any>(true, []);
   toggleMaster: boolean = false;
+  eventsLocation;
 
   ngOnInit() {
     this.selection.onChange.subscribe((events) => {
       if (!this.toggleMaster) {
+        const test = this.selection.selected.map(x => x.id);
+        console.log('test----------->', test);
         this.eventsCalendarRepositoryService.getEventsData(this.selection.selected);
       }
     });
+  }
+
+  onEventsLocationChange(events) {
+    console.log('events location', events, this.eventsLocation);
   }
 
   individualCheckBoxClicked(event) {
@@ -30,22 +37,22 @@ export class EventsCalendarFilterComponent  {
     this.toggleMaster = false;
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
   getSelection() {
-    console.log('selected item is', this.selection.selected);
+    console.log('selecteddddd item is', this.selection.selected);
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.toggleMaster = true;
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
+        const test = this.selection.selected.map(x => x.id);
+        console.log('test----------->', test);
         this.eventsCalendarRepositoryService.getEventsData(this.selection.selected);
   }
 }
