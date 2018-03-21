@@ -289,8 +289,22 @@ export class AppComponent {
       ${1}/${this.currentYear}`)
   }
 
+  getFirstAndLastDayOfTheWeek(week_data) {
+    let startDate = `${this.currentYear}-${this.monthIndex + 1}-${this.getOtherMonthsDay(Object.keys(week_data.sunday[0]).toString())}`;
+    const endDate = `${this.currentYear}-${this.monthIndex + 1}-${this.getOtherMonthsDay(Object.keys(week_data.saturday[0]).toString())}`;
+    this.calculateDayBasedOnDate(endDate);
+    if (this.calculateDayBasedOnDate(startDate) !== 'sunday') {
+      if (this.monthIndex === 0) {
+        startDate = `${this.currentYear-1}-${12}-${this.getOtherMonthsDay(Object.keys(week_data.sunday[0]).toString())}`;
+      } else {
+        startDate = `${this.currentYear}-${this.monthIndex}-${this.getOtherMonthsDay(Object.keys(week_data.sunday[0]).toString())}`;
+      }
+      console.log(startDate, this.calculateDayBasedOnDate(startDate), endDate, this.calculateDayBasedOnDate(endDate));
+    }
+    
+  }
+
   getWeekOfTheMonth(i) {
-    console.log('get week of the month called');
     this.weekWiseWeekDays.sunday = this.weekDays.sunday.filter(x => x === this.weekDays.sunday[i]);
     this.weekWiseWeekDays.monday = this.weekDays.monday.filter(x => x === this.weekDays.monday[i]);
     this.weekWiseWeekDays.tuesday = this.weekDays.tuesday.filter(x => x === this.weekDays.tuesday[i]);
@@ -298,6 +312,9 @@ export class AppComponent {
     this.weekWiseWeekDays.thursday = this.weekDays.thursday.filter(x => x === this.weekDays.thursday[i]);
     this.weekWiseWeekDays.friday = this.weekDays.friday.filter(x => x === this.weekDays.friday[i]);
     this.weekWiseWeekDays.saturday = this.weekDays.saturday.filter(x => x === this.weekDays.saturday[i]);
+    if (this.weekView) {
+      this.getFirstAndLastDayOfTheWeek(this.weekWiseWeekDays);
+    }
   }
 
   getDayOfTheMonth(i) {
@@ -353,8 +370,8 @@ export class AppComponent {
       this.getNextMonthDetails();
       this.monthWiseDays = this.weekDays;
     }).then(x => {
-      this.weekIndex = 0;
-      this.getWeekOfTheMonth(this.weekIndex);
+      // this.weekIndex = 0;
+      // this.getWeekOfTheMonth(this.weekIndex);
       this.dayIndex = 0;
       this.getDayOfTheMonth(this.dayIndex);
     });
