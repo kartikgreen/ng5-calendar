@@ -137,7 +137,11 @@ export class AppComponent {
       this.monthIndex = 0;
       this.currentYear ++;
     }
-    this.getTotalNumberOfDays();
+    return this.getTotalNumberOfDays().then(x => {
+      return new Promise((resolve, reject) => {
+        resolve(x);
+      });
+    });
   }
 
   previousButtonClicked() {
@@ -147,7 +151,11 @@ export class AppComponent {
       this.monthIndex = 11;
       this.currentYear --;
     }
-    this.getTotalNumberOfDays();
+    return this.getTotalNumberOfDays().then(x => {
+      return new Promise((resolve, reject) => {
+        resolve(x);
+      });
+    });
   }
 
   getNextMonthDetails() {
@@ -189,6 +197,10 @@ export class AppComponent {
   }
 
   previousWeekButtonClicked() {
+    console.log('this month has sunday', this.getFirstDayOfTheMonth());
+    if (this.getFirstDayOfTheMonth() === 'sunday') {
+      console.log('this month has sunday', this.getFirstDayOfTheMonth());
+    }
     this.weekIndex --;
     if (this.weekIndex < 0) {
       // this.previousButtonClicked()
@@ -203,15 +215,28 @@ export class AppComponent {
     if (this.getLastDayOfTheMonth() !== 'saturday') {
       weekIndexSkipped = this.calculateNumberOfRowsForCurrentMonth()-1;
     }
+    // ex: if weekindex becomes 4 or 5(highest) then reset to 0
     if (this.weekIndex >= weekIndexSkipped) {
-      this.weekIndex = 0;
-      this.nextButtonClicked();
+      this.nextButtonClicked().then(x => {
+        if (x === 'success') {
+          this.weekIndex = 0;
+          this.getWeekOfTheMonth(this.weekIndex);
+          console.log('weekIndex', this.weekIndex, this.getMonthName(this.monthIndex), 'n o rows for cur month',this.calculateNumberOfRowsForCurrentMonth());
+        }
+      });
+      return;
     }
     this.getWeekOfTheMonth(this.weekIndex);
+    console.log('weekIndex', this.weekIndex, this.getMonthName(this.monthIndex), 'n o rows for cur month',this.calculateNumberOfRowsForCurrentMonth());
   }
   getLastDayOfTheMonth() {
     return this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/
       ${this.daysInMonth(this.monthIndex + 1, this.currentYear)}/${this.currentYear}`)
+  }
+  getFirstDayOfTheMonth() {
+    console.log('monthindex', this.monthIndex);
+    return this.calculateDayBasedOnDate(`${this.getMonthName(this.monthIndex)}/
+      ${1}/${this.currentYear}`)
   }
 
   getWeekOfTheMonth(i) {
@@ -281,6 +306,9 @@ export class AppComponent {
       this.getWeekOfTheMonth(this.weekIndex);
       this.dayIndex = 0;
       this.getDayOfTheMonth(this.dayIndex);
+    });
+    return new Promise((resolve, reject) => {
+      resolve('success');
     });
   }
   
