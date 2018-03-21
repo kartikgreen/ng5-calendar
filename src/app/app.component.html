@@ -58,7 +58,7 @@
             <tr>
               <td>
                 {{this.dayOfTheMonth}}
-                <div style="color: green" *ngIf="this.dayOfTheMonth === this.currentDate && currentMonth === monthIndex">Today</div>
+                <div style="color: green" *ngIf="this.dayOfTheMonth === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</div>
                 <div *ngFor='let events of eventsPerDayOfTheMonth; let i = index'>
                   <span *ngIf="i <= 1">{{events.events_name}}</span>
                   <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -80,7 +80,7 @@
                           <td style="border-left: 5px solid red">
                             <span *ngIf="!highlightOtherMonth(sunday.key)">{{this.getOtherMonthsDay(sunday.key)}}</span>
                             <span style="color:#dfe5ea" *ngIf="highlightOtherMonth(sunday.key)">{{this.getOtherMonthsDay(sunday.key)}}</span>
-                            <span style="color: green" *ngIf="sunday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                            <span style="color: green" *ngIf="sunday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                             <div *ngFor='let events of sunday.value; let i = index'>
                               <span *ngIf="i <= 1">{{events.events_name}}</span>
                               <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -100,7 +100,7 @@
                   <td style="border-left: 5px solid red">
                     <span *ngIf="!highlightOtherMonth(monday.key)">{{this.getOtherMonthsDay(monday.key)}}</span>
                     <span style="color:#dfe5ea" *ngIf="highlightOtherMonth(monday.key)">{{this.getOtherMonthsDay(monday.key)}}</span>
-                    <span style="color: green" *ngIf="monday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <span style="color: green" *ngIf="monday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                     <div *ngFor='let events of monday.value; let i = index'>
                       <span *ngIf="i <= 1">{{events.events_name}}</span>
                       <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -120,7 +120,7 @@
                   <td style="border-left: 5px solid red">
                     <span *ngIf="!highlightOtherMonth(tuesday.key)">{{this.getOtherMonthsDay(tuesday.key)}}</span>
                     <span style="color:#dfe5ea" *ngIf="highlightOtherMonth(tuesday.key)">{{this.getOtherMonthsDay(tuesday.key)}}</span> 
-                    <span style="color: green" *ngIf="tuesday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <span style="color: green" *ngIf="tuesday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                     <div *ngFor='let events of tuesday.value; let i = index'>
                       <span *ngIf="i <= 1">{{events.events_name}}</span>
                       <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -140,7 +140,7 @@
                   <td style="border-left: 5px solid red">
                     <span *ngIf="!highlightOtherMonth(wednesday.key)">{{this.getOtherMonthsDay(wednesday.key)}}</span>
                     <span style="color:#dfe5ea" *ngIf="highlightOtherMonth(wednesday.key)">{{this.getOtherMonthsDay(wednesday.key)}}</span>  
-                    <span style="color: green" *ngIf="wednesday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <span style="color: green" *ngIf="wednesday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                     <div *ngFor='let events of wednesday.value; let i = index'>
                       <span *ngIf="i <= 1">{{events.events_name}}</span>
                       <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -160,7 +160,7 @@
                   <td style="border-left: 5px solid red">
                     <span *ngIf="!highlightOtherMonth(thursday.key)">{{this.getOtherMonthsDay(thursday.key)}}</span>
                     <span style="color:#dfe5ea" *ngIf="highlightOtherMonth(thursday.key)">{{this.getOtherMonthsDay(thursday.key)}}</span> 
-                    <span style="color: green" *ngIf="thursday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <span style="color: green" *ngIf="thursday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                     <div *ngFor='let events of thursday.value; let i = index'>
                       <span *ngIf="i <= 1">{{events.events_name}}</span>
                       <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -180,7 +180,7 @@
                   <td style="border-left: 5px solid red">
                     <span *ngIf="!highlightOtherMonth(friday.key)">{{this.getOtherMonthsDay(friday.key)}}</span>
                     <span style="color:#dfe5ea" *ngIf="highlightOtherMonth(friday.key)">{{this.getOtherMonthsDay(friday.key)}}</span> 
-                    <span style="color: green" *ngIf="friday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <span style="color: green" *ngIf="friday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                     <div *ngFor='let events of friday.value; let i = index'>
                       <span *ngIf="i <= 1">{{events.events_name}}</span>
                       <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -200,7 +200,7 @@
                   <td style="border-left: 5px solid red">
                     <span *ngIf="!highlightOtherMonth(saturday.key)">{{this.getOtherMonthsDay(saturday.key)}}</span>
                     <span style="color:#dfe5ea" *ngIf="highlightOtherMonth(saturday.key)">{{this.getOtherMonthsDay(saturday.key)}}</span> 
-                    <span style="color: green" *ngIf="saturday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    <span style="color: green" *ngIf="saturday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                     <div *ngFor='let events of saturday.value; let i = index'>
                       <span *ngIf="i <= 1">{{events.events_name}}</span>
                       <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -222,7 +222,7 @@
               <ng-container *ngFor="let key of this.weekWiseWeekDays.sunday | valuesPipe">
                       <tr *ngFor='let sunday of key.value | valuesPipe'> 
                         <td style="border-left: 5px solid red">
-                            {{this.getOtherMonthsDay(sunday.key)}} <span style="color: green" *ngIf="sunday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                            {{this.getOtherMonthsDay(sunday.key)}} <span style="color: green" *ngIf="sunday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                           <div *ngFor='let events of sunday.value; let i = index'>
                             <span *ngIf="i <= 1">{{events.events_name}}</span>
                             <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -240,7 +240,7 @@
             <ng-container *ngFor="let key of this.weekWiseWeekDays.monday | valuesPipe">
               <tr *ngFor='let monday of key.value | valuesPipe'> 
                 <td style="border-left: 5px solid red">
-                    {{this.getOtherMonthsDay(monday.key)}} <span style="color: green" *ngIf="monday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    {{this.getOtherMonthsDay(monday.key)}} <span style="color: green" *ngIf="monday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                   <div *ngFor='let events of monday.value; let i = index'>
                     <span *ngIf="i <= 1">{{events.events_name}}</span>
                     <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -258,7 +258,7 @@
             <ng-container *ngFor="let key of this.weekWiseWeekDays.tuesday | valuesPipe">
               <tr *ngFor='let tuesday of key.value | valuesPipe'> 
                 <td style="border-left: 5px solid red">
-                    {{this.getOtherMonthsDay(tuesday.key)}} <span style="color: green" *ngIf="tuesday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    {{this.getOtherMonthsDay(tuesday.key)}} <span style="color: green" *ngIf="tuesday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                   <div *ngFor='let events of tuesday.value; let i = index'>
                     <span *ngIf="i <= 1">{{events.events_name}}</span>
                     <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -276,7 +276,7 @@
             <ng-container *ngFor="let key of this.weekWiseWeekDays.wednesday | valuesPipe">
               <tr *ngFor='let wednesday of key.value | valuesPipe'> 
                 <td style="border-left: 5px solid red">
-                    {{this.getOtherMonthsDay(wednesday.key)}} <span style="color: green" *ngIf="wednesday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    {{this.getOtherMonthsDay(wednesday.key)}} <span style="color: green" *ngIf="wednesday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                   <div *ngFor='let events of wednesday.value; let i = index'>
                     <span *ngIf="i <= 1">{{events.events_name}}</span>
                     <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -294,7 +294,7 @@
             <ng-container *ngFor="let key of this.weekWiseWeekDays.thursday | valuesPipe">
               <tr *ngFor='let thursday of key.value | valuesPipe'> 
                 <td style="border-left: 5px solid red">
-                    {{this.getOtherMonthsDay(thursday.key)}} <span style="color: green" *ngIf="thursday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    {{this.getOtherMonthsDay(thursday.key)}} <span style="color: green" *ngIf="thursday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                   <div *ngFor='let events of thursday.value; let i = index'>
                     <span *ngIf="i <= 1">{{events.events_name}}</span>
                     <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -312,7 +312,7 @@
             <ng-container *ngFor="let key of this.weekWiseWeekDays.friday | valuesPipe">
               <tr *ngFor='let friday of key.value | valuesPipe'> 
                 <td style="border-left: 5px solid red">
-                    {{this.getOtherMonthsDay(friday.key)}} <span style="color: green" *ngIf="friday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    {{this.getOtherMonthsDay(friday.key)}} <span style="color: green" *ngIf="friday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                   <div *ngFor='let events of friday.value; let i = index'>
                     <span *ngIf="i <= 1">{{events.events_name}}</span>
                     <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -330,7 +330,7 @@
             <ng-container *ngFor="let key of this.weekWiseWeekDays.saturday | valuesPipe">
               <tr *ngFor='let saturday of key.value | valuesPipe'> 
                 <td style="border-left: 5px solid red">
-                    {{this.getOtherMonthsDay(saturday.key)}} <span style="color: green" *ngIf="saturday.key === this.currentDate && currentMonth === monthIndex">Today</span>
+                    {{this.getOtherMonthsDay(saturday.key)}} <span style="color: green" *ngIf="saturday.key === this.currentDate && currentMonth === monthIndex && this.currentYear === year">Today</span>
                   <div *ngFor='let events of saturday.value; let i = index'>
                     <span *ngIf="i <= 1">{{events.events_name}}</span>
                     <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
@@ -348,22 +348,5 @@
     </tbody>
     </table>
     <pre>{{this.weekDays.sunday  | json}}</pre>
-    <br><br>
-    <ng-container *ngFor="let key of this.weekDays.sunday | valuesPipe">
-      <tr *ngFor='let sunday of key.value | valuesPipe'> 
-        <td style="border-left: 5px solid red">
-          {{sunday | json}} <span style="color: green" *ngIf="sunday.key === this.currentDate && currentMonth === monthIndex">Today</span>
-          <div *ngFor='let events of sunday.value; let i = index'>
-            <span *ngIf="i <= 1">{{events.events_name}}</span>
-            <label style="text-align:center" *ngIf="i > 1" class="form-check-label">
-              <a class="fa fa-plus" aria-hidden="true" 
-                title="Click here to view more..." 
-                (click)="showEvents(sunday.value)">More...
-              </a>
-              </label>
-          </div>
-        </td>
-      </tr>
-</ng-container>
   </div>
 </div>

@@ -8,6 +8,7 @@ import {VERSION, MatDialog, MatDialogRef} from '@angular/material';
 })
 export class AppComponent {
   currentYear: number = (new Date()).getFullYear();
+  year: number = (new Date()).getFullYear();
   DialogRef: MatDialogRef<DialogComponent>;
   numberOfDaysInMonth: any;
   weekDays: any = {};
@@ -61,6 +62,7 @@ export class AppComponent {
   constructor(private dialog: MatDialog) {}
   
   ngOnInit() {
+    console.log('currentYear', this.currentYear);
     this.resetWeekDays();
     this.getTotalNumberOfDays();
   }
@@ -197,16 +199,29 @@ export class AppComponent {
   }
 
   previousWeekButtonClicked() {
-    console.log('this month has sunday', this.getFirstDayOfTheMonth());
-    if (this.getFirstDayOfTheMonth() === 'sunday') {
-      console.log('this month has sunday', this.getFirstDayOfTheMonth());
-    }
     this.weekIndex --;
+    let hasSunday = false;
+
+    if (this.getFirstDayOfTheMonth() === 'sunday') {
+      hasSunday = true;
+    } 
+
     if (this.weekIndex < 0) {
-      // this.previousButtonClicked()
-      this.weekIndex = this.calculateNumberOfRowsForCurrentMonth() - 1;
+        this.previousButtonClicked().then(x => {
+          if (x === 'success') {
+            if (hasSunday) {
+              this.weekIndex = this.calculateNumberOfRowsForCurrentMonth()-1;
+            } else {
+              this.weekIndex = this.calculateNumberOfRowsForCurrentMonth() - 2;
+            }
+            this.getWeekOfTheMonth(this.weekIndex);
+            console.log('weekIndex', this.weekIndex, this.getMonthName(this.monthIndex), 'n o rows for cur month',this.calculateNumberOfRowsForCurrentMonth(), 'hasSunday',hasSunday);
+          }
+        });
+        return;
     }
     this.getWeekOfTheMonth(this.weekIndex);
+    console.log('weekIndex', this.weekIndex, this.getMonthName(this.monthIndex), 'n o rows for cur month',this.calculateNumberOfRowsForCurrentMonth());
   }
 
   nextWeekButtonClicked() {
