@@ -10,13 +10,13 @@ import { DialogComponent } from './components/dialog/dialog.component';
 import {MatSelectModule} from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 
-import { AppComponent } from './app.component';
+import { EventsCalendarViewComponent } from './components/events-calendar-view/events-calendar-view.component';
 import { ValuesPipe } from './pipes/key-value-pipe';
 import { EventsCalendarFilterComponent } from './components/events-calendar-filter/events-calendar-filter.component';
 
 @NgModule({
   declarations: [
-    AppComponent, ValuesPipe, DialogComponent, EventsCalendarFilterComponent
+    EventsCalendarViewComponent, ValuesPipe, DialogComponent, EventsCalendarFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -30,6 +30,6 @@ import { EventsCalendarFilterComponent } from './components/events-calendar-filt
   ],
   providers: [EventsCalendarRepositoryService],
   entryComponents: [DialogComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [EventsCalendarViewComponent]
 })
 export class AppModule { }

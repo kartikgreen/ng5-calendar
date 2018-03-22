@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { DialogComponent } from './components/dialog/dialog.component';
+import { DialogComponent } from '../dialog/dialog.component';
 import {VERSION, MatDialog, MatDialogRef} from '@angular/material';
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-events-calendar-view',
+  templateUrl: './events-calendar-view.component.html',
+  styleUrls: ['./events-calendar-view.component.css']
 })
-export class AppComponent {
+export class EventsCalendarViewComponent {
   currentYear: number = (new Date()).getFullYear();
   year: number = (new Date()).getFullYear();
   DialogRef: MatDialogRef<DialogComponent>;
