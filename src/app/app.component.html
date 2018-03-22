@@ -28,7 +28,7 @@
     </span>
   </div>
   <div class="container">
-    <app-events-calendar-filter style="float: left; height: 500px; width:300px;"></app-events-calendar-filter> 
+    <app-events-calendar-filter (eventsData)='onEventsSearch($event)' [eventsDate]='eventsDate' style="float: left; height: 500px; width:300px;"></app-events-calendar-filter> 
     <table style="float: left; width:300px;" class="table">
       <thead *ngIf="calendarViewType !== 'day'">
         <tr>

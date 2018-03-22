@@ -1,3 +1,4 @@
+<p *ngIf="eventsDate">{{eventsDate[0]}} - {{eventsDate[1]}}</p>
 <mat-form-field>
   <mat-select [(ngModel)]="eventsLocation" (ngModelChange)="onEventsLocationChange($event)" placeholder="Select Location">
     <mat-option value="1">
@@ -39,4 +40,6 @@
              (click)="selection.toggle(row)">
     </mat-row>
   </mat-table>
+  <!-- submit button -->
+  <button (click)='getEventsData()' color='primary' mat-button>Get Events</button>
 </div>

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import {EventsCalendarRepositoryService} from './events-calendar-repository.service';
@@ -17,12 +17,14 @@ export class EventsCalendarFilterComponent  {
   selection = new SelectionModel<any>(true, []);
   toggleMaster: boolean = false;
   eventsLocation;
-
+  eventParameters;
+  categories: Array<number>;
+  @Input() eventsDate;
+  @Output() eventsData: EventEmitter<any> = new EventEmitter<any>();
   ngOnInit() {
     this.selection.onChange.subscribe((events) => {
       if (!this.toggleMaster) {
-        const test = this.selection.selected.map(x => x.id);
-        console.log('test----------->', test);
+        this.categories = this.selection.selected.map(x => x.id);
         this.eventsCalendarRepositoryService.getEventsData(this.selection.selected);
       }
     });
@@ -42,18 +44,26 @@ export class EventsCalendarFilterComponent  {
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
-  getSelection() {
-    console.log('selecteddddd item is', this.selection.selected);
-  }
 
   masterToggle() {
     this.toggleMaster = true;
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
-        const test = this.selection.selected.map(x => x.id);
-        console.log('test----------->', test);
+        this.categories = this.selection.selected.map(x => x.id);
         this.eventsCalendarRepositoryService.getEventsData(this.selection.selected);
+  }
+  getEventsData() {
+    if (this.categories && this.eventsDate && this.eventsLocation) {
+      this.eventParameters = {
+        "Id": this.eventsLocation,
+        "Categories": this.categories,
+        "StartDate": this.eventsDate[0],
+        "EndDate": this.eventsDate[1]
+      }
+      this.eventsCalendarRepositoryService.getEventsData(this.eventParameters);
+      this.eventsData.emit(this.eventParameters);
+    }
   }
 }
 

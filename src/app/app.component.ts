@@ -28,6 +28,7 @@ export class AppComponent {
   currentMonth: number = new Date().getMonth();
   currentDate: string = new Date().getDate().toString();
   eventsPerDayOfTheMonth;
+  eventsDate: Array<string>;
   monthWiseDays: any = {};
   eventsData: any = {
     "data": [
@@ -217,7 +218,9 @@ export class AppComponent {
   }
 
   getMonthsFirstDateAndLastDate() {
-    console.log(this.daysInMonth(this.monthIndex + 1, this.currentYear));
+    const startDate = `${this.currentYear}-${this.monthIndex + 1}-${1}`;
+    const endDate = `${this.currentYear}-${this.monthIndex + 1}-${this.daysInMonth(this.monthIndex + 1, this.currentYear)}`;
+    this.eventsDate = [startDate, endDate];
   }
 
   getWeeksFirstDateAndLastDate(i) {
@@ -292,16 +295,15 @@ export class AppComponent {
   getFirstAndLastDayOfTheWeek(week_data) {
     let startDate = `${this.currentYear}-${this.monthIndex + 1}-${this.getOtherMonthsDay(Object.keys(week_data.sunday[0]).toString())}`;
     const endDate = `${this.currentYear}-${this.monthIndex + 1}-${this.getOtherMonthsDay(Object.keys(week_data.saturday[0]).toString())}`;
-    this.calculateDayBasedOnDate(endDate);
     if (this.calculateDayBasedOnDate(startDate) !== 'sunday') {
       if (this.monthIndex === 0) {
         startDate = `${this.currentYear-1}-${12}-${this.getOtherMonthsDay(Object.keys(week_data.sunday[0]).toString())}`;
       } else {
         startDate = `${this.currentYear}-${this.monthIndex}-${this.getOtherMonthsDay(Object.keys(week_data.sunday[0]).toString())}`;
       }
-      console.log(startDate, this.calculateDayBasedOnDate(startDate), endDate, this.calculateDayBasedOnDate(endDate));
     }
-    
+    this.eventsDate = [startDate, endDate];
+    console.log(startDate, this.calculateDayBasedOnDate(startDate), endDate, this.calculateDayBasedOnDate(endDate));
   }
 
   getWeekOfTheMonth(i) {
@@ -322,7 +324,16 @@ export class AppComponent {
     const dayWithEvents = this.attachEventsToTheDate(this.numberOfDaysInMonth.map(x => x + 1));
     this.dayOfTheMonth = Object.keys(dayWithEvents[i]).toString();
     Object.values(dayWithEvents[i]).map(x => this.eventsPerDayOfTheMonth = x);
+    if (this.dayView) {
+      const startDate = `${this.currentYear}-${this.monthIndex + 1}-${this.dayOfTheMonth}`;
+      const endDate = `${this.currentYear}-${this.monthIndex + 1}-${this.dayOfTheMonth}`;
+      this.eventsDate = [startDate, endDate];
+    }
     return;
+  }
+
+  onEventsSearch(events) {
+    console.log('new events fired', events);
   }
 
   getTotalNumberOfDays() {
